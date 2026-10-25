@@ -1,0 +1,972 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1D5A4D">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%231D5A4D%27/%3E%3Ctext x=%2716%27 y=%2721%27 font-family=%27Arial%27 font-weight=%27700%27 font-size=%2713%27 fill=%27white%27 text-anchor=%27middle%27%3EAZ%3C/text%3E%3C/svg%3E">
+<title>Atelier AZ Cosmétik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Concept : l'établi d'un façonnier de parfum. Verre de flacon (vert bouteille), ambre du jus, porcelaine du labo.
+   Chaque projet se lit comme un ordre de fabrication : référence, kilos de concentré, composants qui voyagent jusqu'au conditionneur. */
+:root{
+  --bg:#F2F4F1; --surface:#FFFFFF; --surface-2:#E8ECE8; --ink:#15211E; --mute:#5A6964; --line:#D7DDD8;
+  --glass:#1D5A4D; --glass-ink:#FFFFFF; --glass-soft:#DCEAE5;
+  --amber:#B4712A; --amber-soft:#F5E6D2;
+  --ok:#2E7A4E; --ok-soft:#DDF0E3; --warn:#B45309; --warn-soft:#FCEBD5; --stop:#B42318; --stop-soft:#FBE3E0;
+  --shadow:0 1px 2px rgba(21,33,30,.06),0 8px 24px rgba(21,33,30,.06);
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1412; --surface:#151D1A; --surface-2:#1C2622; --ink:#E6ECE9; --mute:#9AA9A3; --line:#29352F;
+  --glass:#62B8A2; --glass-ink:#0B1311; --glass-soft:#183530;
+  --amber:#E1A55E; --amber-soft:#3A2B18;
+  --ok:#5CC28A; --ok-soft:#173226; --warn:#F0A04B; --warn-soft:#3A2913; --stop:#F07167; --stop-soft:#3B1C1A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1412; --surface:#151D1A; --surface-2:#1C2622; --ink:#E6ECE9; --mute:#9AA9A3; --line:#29352F;
+  --glass:#62B8A2; --glass-ink:#0B1311; --glass-soft:#183530;
+  --amber:#E1A55E; --amber-soft:#3A2B18;
+  --ok:#5CC28A; --ok-soft:#173226; --warn:#F0A04B; --warn-soft:#3A2913; --stop:#F07167; --stop-soft:#3B1C1A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--glass);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display);margin:0;line-height:1.08;text-wrap:balance;letter-spacing:-.01em}
+.mono{font-family:var(--f-mono);font-weight:600;letter-spacing:.02em}
+.tnum{font-variant-numeric:tabular-nums}
+.mute{color:var(--mute)}
+.i{width:18px;height:18px;flex:none}
+
+/* ===== Shell ===== */
+.app{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;background:var(--glass);color:var(--glass-ink);display:flex;flex-direction:column;padding:20px 14px;gap:18px}
+.logo{display:flex;align-items:center;gap:10px;padding:0 6px}
+.logo .mk{width:38px;height:38px;border-radius:10px;border:1.5px solid currentColor;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:15px;letter-spacing:-.02em}
+.logo b{font-family:var(--f-display);font-size:19px;display:block;line-height:1}
+.logo small{font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.nav{display:grid;gap:2px}
+.nav button{display:flex;align-items:center;gap:10px;background:transparent;border:0;border-radius:9px;padding:9px 10px;text-align:left;font-weight:600;color:inherit;opacity:.82}
+.nav button:hover{opacity:1;background:color-mix(in srgb,var(--glass-ink) 10%,transparent)}
+.nav button[aria-current="page"]{opacity:1;background:color-mix(in srgb,var(--glass-ink) 16%,transparent)}
+.nav .ct{margin-left:auto;font-family:var(--f-mono);font-size:12px;background:var(--amber);color:#fff;border-radius:999px;padding:1px 7px}
+.side .foot{margin-top:auto;font-size:12px;opacity:.75;padding:0 6px}
+.side .foot button{background:transparent;border:1px solid currentColor;border-radius:8px;padding:6px 9px;color:inherit;font-size:12px;margin-top:8px}
+
+.main{min-width:0;padding-block:18px 60px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+.topbar{display:flex;gap:12px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.search{position:relative;flex:1;min-width:220px;max-width:520px}
+.search input{width:100%;border:1.5px solid var(--line);background:var(--surface);border-radius:11px;padding:10px 12px 10px 38px}
+.search .i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--mute)}
+.results{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);z-index:30;max-height:360px;overflow:auto;padding:6px}
+.results button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:transparent;border:0;border-radius:8px;padding:8px 10px}
+.results button:hover,.results button:focus-visible{background:var(--surface-2)}
+.results .k{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);margin-left:auto}
+.demo{font-size:12.5px;color:var(--mute);background:var(--amber-soft);border-radius:999px;padding:5px 11px}
+
+/* ===== Common ===== */
+.head{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.head h1{font-size:clamp(28px,3.4vw,40px);font-weight:800}
+.head p{margin:4px 0 0;color:var(--mute)}
+.head .act{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 13px;font-weight:600;white-space:nowrap}
+.btn:hover{border-color:var(--mute)}
+.btn.pri{background:var(--glass);border-color:var(--glass);color:var(--glass-ink)}
+.btn.amb{background:var(--amber);border-color:var(--amber);color:#fff}
+.btn.sm{padding:5px 10px;font-size:13px;border-radius:8px}
+.btn.ghost{border-color:transparent;background:transparent}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.lbl{font-size:11.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 9px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.p-ok{background:var(--ok-soft);color:var(--ok)}.p-warn{background:var(--warn-soft);color:var(--warn)}.p-stop{background:var(--stop-soft);color:var(--stop)}
+.p-glass{background:var(--glass-soft);color:var(--glass)}.p-amb{background:var(--amber-soft);color:var(--amber)}.p-mute{background:var(--surface-2);color:var(--mute)}
+.ref{font-family:var(--f-mono);font-weight:600;font-size:12.5px;letter-spacing:.03em;border:1px solid var(--line);border-radius:6px;padding:1px 6px;background:var(--surface-2);white-space:nowrap}
+.sw{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.18);flex:none;display:inline-block}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g21{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+.sec{margin-top:24px}
+.sec>h2{font-size:21px;margin-bottom:10px;display:flex;gap:10px;align-items:baseline}
+.sec>h2 small{font-family:var(--f-body);font-size:13px;font-weight:500;color:var(--mute)}
+.empty{color:var(--mute);font-size:14px;padding:10px 0}
+.tbl-wrap{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{text-align:left;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);font-weight:700;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .n{text-align:right;font-variant-numeric:tabular-nums}
+.art{display:flex;align-items:center;gap:9px;min-width:0}
+.art b{display:block;font-weight:600}
+.art small{color:var(--mute)}
+
+/* KPI */
+.kpi .v{font-family:var(--f-display);font-size:38px;font-weight:800;line-height:1;margin-top:8px}
+.kpi .s{font-size:13px;color:var(--mute);margin-top:4px}
+
+/* Alerts */
+.todo{display:grid;gap:8px}
+.todo button{display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;border:1px solid var(--line);background:var(--surface);border-radius:11px;padding:11px 12px}
+.todo button:hover{border-color:var(--mute)}
+.todo .dot{width:8px;height:8px;border-radius:50%;margin-top:7px;flex:none}
+.todo b{display:block;font-weight:600}
+.todo small{color:var(--mute)}
+.d-stop{background:var(--stop)}.d-warn{background:var(--warn)}.d-glass{background:var(--glass)}
+
+/* Pipeline */
+.pipe{display:grid;grid-template-columns:repeat(5,minmax(160px,1fr));gap:10px;overflow-x:auto;padding-bottom:4px}
+.col{background:var(--surface-2);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.col h3{font-size:14px;font-family:var(--f-body);font-weight:700;display:flex;justify-content:space-between}
+.mini{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 10px;text-align:left;width:100%}
+.mini:hover{border-color:var(--glass)}
+.mini b{display:block;font-size:14px}
+.mini small{color:var(--mute);font-size:12.5px}
+
+/* Project cards */
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-weight:600;font-size:13.5px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.pcard{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px;display:flex;flex-direction:column;gap:10px;width:100%}
+.pcard:hover{border-color:var(--glass);box-shadow:var(--shadow)}
+.pcard h3{font-size:21px}
+.pcard .row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.steps i{height:5px;border-radius:3px;background:var(--surface-2)}
+.steps i.on{background:var(--glass)}
+.steps i.now{background:var(--amber)}
+.gauge{display:flex;align-items:center;gap:8px;font-size:13px}
+.gauge .bar{flex:1;height:7px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.gauge .bar i{display:block;height:100%;background:var(--glass);border-radius:4px}
+.gauge .bar i.full{background:var(--ok)}
+
+/* Project detail */
+.back{border:0;background:transparent;color:var(--mute);font-weight:600;padding:0;margin-bottom:10px;display:inline-flex;gap:6px;align-items:center}
+.phead{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start}
+.phead h1{font-size:clamp(30px,4vw,46px);font-weight:800}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:8px;color:var(--mute);font-size:14px}
+.meta b{color:var(--ink);font-weight:600}
+.valid-ref{border:1.5px solid var(--ok);border-radius:12px;padding:10px 14px;background:var(--ok-soft);min-width:220px}
+.valid-ref.none{border-color:var(--warn);background:var(--warn-soft)}
+.valid-ref .mono{font-size:20px;display:block;margin-top:2px}
+.stepper{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:18px 0}
+.stepper button{border:0;background:transparent;text-align:left;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--mute)}
+.stepper button i{height:6px;border-radius:3px;background:var(--surface-2);display:block}
+.stepper button.on{color:var(--ink)}.stepper button.on i{background:var(--glass)}
+.stepper button.now{color:var(--amber)}.stepper button.now i{background:var(--amber)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow-x:auto}
+.tabs button{border:0;background:transparent;padding:10px 12px;font-weight:600;color:var(--mute);border-bottom:2.5px solid transparent;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--glass)}
+.kit{display:grid;gap:6px}
+.kit div{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;background:var(--surface-2);font-size:14px}
+.kit div.ok{background:var(--ok-soft)}
+.kit .st{margin-left:auto;font-size:12.5px;font-weight:700}
+.kit div.ok .st{color:var(--ok)}
+.kit div.ko .st{color:var(--warn)}
+
+/* Supply track */
+.track{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;min-width:180px}
+.track i{height:6px;border-radius:3px;background:var(--surface-2)}
+.track i.on{background:var(--glass)}
+.track i.done{background:var(--ok)}
+.trk-l{font-size:12.5px;font-weight:600;margin-top:5px;display:block}
+
+/* Jus */
+.kg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.kg .v{font-family:var(--f-display);font-size:30px;font-weight:800;line-height:1;margin-top:6px}
+.kg .v small{font-size:15px;font-family:var(--f-body);color:var(--mute);font-weight:600}
+.formula{font-family:var(--f-mono);font-size:12.5px;color:var(--mute);margin-top:8px}
+.prog{height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden;margin-top:12px}
+.prog i{display:block;height:100%;background:var(--amber)}
+.prog i.full{background:var(--ok)}
+.inline{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+.f{display:grid;gap:5px;min-width:0}
+.f>span{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.f input,.f select,.f textarea{border:1.5px solid var(--line);background:var(--surface);border-radius:9px;padding:8px 10px;width:100%}
+.f textarea{min-height:80px;resize:vertical}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--glass)}
+
+/* Journal */
+.notes{display:grid;gap:10px}
+.note{border-left:3px solid var(--amber);padding:4px 0 4px 12px}
+.note small{color:var(--mute);font-size:12.5px}
+.note p{margin:3px 0 0}
+.tasks{display:grid;gap:6px}
+.tasks label{display:flex;gap:10px;align-items:flex-start;padding:7px 9px;border-radius:9px;background:var(--surface-2);cursor:pointer}
+.tasks input{width:18px;height:18px;accent-color:var(--glass);margin-top:1px;flex:none}
+.tasks label.done span{text-decoration:line-through;color:var(--mute)}
+.rdv{display:flex;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.rdv:last-child{border-bottom:0}
+.cal{width:52px;flex:none;text-align:center;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.cal span{display:block;background:var(--glass);color:var(--glass-ink);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 0}
+.cal b{display:block;font-family:var(--f-display);font-size:20px;padding:2px 0 3px}
+.rdv .t{min-width:0}
+.rdv .t b{display:block}
+.rdv .t small{color:var(--mute)}
+
+.stack{display:flex;height:16px;border-radius:8px;overflow:hidden;margin:14px 0 10px;background:var(--surface-2)}
+.stack i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13.5px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.legend small{color:var(--mute)}
+.money>div:first-child{display:flex;justify-content:space-between;gap:8px;font-size:14px}
+.money b{font-family:var(--f-display);font-size:20px}
+.money .bar{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden;margin:6px 0 4px}
+.money .bar i{display:block;height:100%}
+input.pu{width:88px;border:1.5px solid var(--line);background:var(--surface);border-radius:7px;padding:4px 6px;text-align:right;font-variant-numeric:tabular-nums}
+input.pay{width:18px;height:18px;accent-color:var(--ok)}
+.tbl tfoot td{border-top:2px solid var(--ink);border-bottom:0}
+.vs{display:grid;gap:3px}
+.vs i{display:block;height:7px;border-radius:4px}
+.vs .ca{background:var(--glass-soft);outline:1px solid var(--glass)}
+.vs .cr{background:var(--glass)}
+
+.h2{font-size:21px;margin-bottom:10px;display:flex;gap:10px;align-items:baseline}
+.h2 small{font-family:var(--f-body);font-size:13px;font-weight:500;color:var(--mute)}
+.welcome{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;background:var(--glass-soft);border-radius:14px;padding:14px 16px;margin-bottom:18px}
+.welcome b{font-family:var(--f-display);font-size:17px}
+.welcome ol{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px;font-size:14.5px}
+.welcome li{display:flex;gap:10px;align-items:baseline}
+.welcome li span{width:22px;height:22px;flex:none;border-radius:50%;background:var(--glass);color:var(--glass-ink);display:grid;place-items:center;font-weight:700;font-size:12px}
+.nexts{display:grid;gap:8px}
+.next{display:flex;gap:14px;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:12px;padding:12px 14px;flex-wrap:wrap}
+.next.wait{border-left-color:var(--line)}
+.next.site{border-left-color:var(--glass);background:var(--glass-soft)}
+.phead + .stepper + .next, .stepper + .next{margin:0 0 16px}
+.nx-t{display:grid;gap:2px;min-width:0;flex:1 1 260px}
+.nx-t b{font-size:15.5px}
+.nx-t small{color:var(--mute)}
+.nx-p{border:0;background:transparent;padding:0;text-align:left;font-weight:700;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--glass)}
+.nx-p small{text-transform:none;letter-spacing:0;font-weight:500;color:var(--mute)}
+.pc-next{font-size:13.5px;font-weight:600;color:var(--amber);border-top:1px dashed var(--line);padding-top:8px}
+.lm{border:1.5px dashed var(--glass);border-radius:14px;padding:14px 16px;display:grid;gap:8px}
+.lm p{margin:0;font-size:14px}
+.lm-r{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.lm-r span{display:grid}
+.lm-r small{color:var(--mute)}
+
+/* Modal + toast */
+.modal{position:fixed;inset:0;background:rgba(10,16,14,.5);display:grid;place-items:center;z-index:50;padding:16px}
+.modal[hidden]{display:none}
+.modal .card{width:100%;max-width:560px;max-height:88vh;overflow:auto;box-shadow:var(--shadow)}
+.modal h2{font-size:24px;margin-bottom:12px}
+.form{display:grid;gap:12px}
+.form .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form .end{display:flex;justify-content:flex-end;gap:8px;margin-top:4px}
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;transition:.22s;background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:11px;font-weight:600;z-index:60;max-width:calc(100% - 32px)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.contacts{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.contacts ul{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px}
+.contacts li{font-size:14px}
+.contacts li small{display:block;color:var(--mute)}
+
+/* Mobile */
+.mnav{display:none}
+@media (max-width:1100px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g21{grid-template-columns:1fr}}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{display:none}
+  .main{padding-block:14px 96px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .mnav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;background:var(--glass);color:var(--glass-ink);z-index:40;padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
+  .mnav button{border:0;background:transparent;color:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:6px 2px;border-radius:8px;opacity:.8}
+  .mnav button[aria-current="page"]{opacity:1;background:color-mix(in srgb,var(--glass-ink) 16%,transparent)}
+  .mtitle{display:flex!important}
+  .g2,.kg{grid-template-columns:1fr}
+  .phead{grid-template-columns:1fr}
+  .stepper{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .stepper button{font-size:11px}
+  .form .two{grid-template-columns:1fr}
+}
+@media (max-width:520px){.g4{grid-template-columns:1fr 1fr}.kpi .v{font-size:30px}}
+.mtitle{display:none;align-items:center;gap:10px;width:100%}
+.mtitle .mk{width:32px;height:32px;border-radius:9px;background:var(--glass);color:var(--glass-ink);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:13px}
+.mtitle b{font-family:var(--f-display);font-size:18px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="app">
+  <aside class="side" aria-label="Navigation">
+    <div class="logo"><div class="mk">AZ</div><div><b>AZ Cosmétik</b><small>Atelier</small></div></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="foot">Démo : données fictives, enregistrées dans ce navigateur.<br>Conçu par Les Monsieurs.<br><button id="reset">Réinitialiser la démo</button></div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div class="mtitle"><div class="mk">AZ</div><b>AZ Cosmétik</b></div>
+      <div class="search">
+        <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Rechercher un projet, une référence de jus, un article…" autocomplete="off" aria-label="Rechercher">
+        <div class="results" id="res" hidden></div>
+      </div>
+      <span class="demo">Démo · données fictives</span>
+    </div>
+    <div id="view"></div>
+  </main>
+</div>
+<nav class="mnav" id="mnav" aria-label="Navigation"></nav>
+<div class="modal" id="modal" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const E = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = () => Math.random().toString(36).slice(2, 9);
+const T0 = new Date(); T0.setHours(0, 0, 0, 0);
+const iso = dt => { const x = new Date(dt); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0'); };
+const D = off => iso(new Date(T0.getTime() + off * 864e5));
+const TODAY = iso(T0);
+const days = s => Math.round((new Date(s + 'T00:00') - T0) / 864e5);
+const fd = s => s ? new Date(s + 'T12:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '—';
+const fdl = s => s ? new Date(s + 'T12:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }) : '—';
+const kg = n => (Math.round(n * 100) / 100).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' kg';
+const num = n => Number(n || 0).toLocaleString('fr-FR');
+const rel = s => { const n = days(s); return n === 0 ? 'aujourd’hui' : n === 1 ? 'demain' : n === -1 ? 'hier' : n > 0 ? 'dans ' + n + ' j' : 'il y a ' + (-n) + ' j'; };
+
+const IC = {
+  home: '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
+  proj: '<path d="M10 2h4M11 2v3.2a6 6 0 1 0 2 0V2"/><path d="M8 14h8"/>',
+  stock: '<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/>',
+  cmd: '<path d="M2 7h11v9H2zM13 10h4l4 3v3h-8"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
+  cal: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6"/>',
+  euro: '<path d="M18 6.5A7 7 0 1 0 18 17.5M4 10h9M4 14h9"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', back: '<path d="m15 18-6-6 6-6"/>', check: '<path d="m5 12 5 5L20 7"/>',
+};
+const ic = (n, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`;
+
+const ETAPES = ['Brief', 'Formulation', 'Sourcing', 'Production', 'Livré'];
+const LST = [
+  { k: 'a_commander', n: 'À commander', next: 'Commander' },
+  { k: 'commandee', n: 'Commandé', next: 'Passer en transit' },
+  { k: 'transit', n: 'En transit', next: 'Marquer reçu' },
+  { k: 'recue', n: 'Reçu à l’atelier', next: 'Envoyer au conditionneur' },
+  { k: 'envoyee', n: 'Parti chez le conditionneur', next: 'Confirmer la réception' },
+  { k: 'chez_cond', n: 'Reçu par le conditionneur', next: null },
+];
+const FST = { essai: ['En essai', 'p-amb'], validee: ['Validée', 'p-ok'], refusee: ['Refusée', 'p-stop'], remplacee: ['Remplacée', 'p-mute'] };
+const CST = { commandee: ['Commandée', 'p-mute'], transit: ['En transit', 'p-amb'], recue: ['Reçue', 'p-ok'] };
+
+/* ===================== Données de démo ===================== */
+function seed() {
+  const C = [
+    ['c1', 'client', 'Maison Ambrée', 'Lyon · Inès R.'], ['c2', 'client', 'Oud Royal Paris', 'Paris · Samir K.'], ['c3', 'client', 'Atelier Nour', 'Marseille · Nour B.'],
+    ['c4', 'client', 'Lys & Cèdre', 'Bordeaux · Julien P.'], ['c5', 'client', 'Sable d’Or', 'Nice · Yasmine A.'],
+    ['n1', 'nez', 'Claire Morel', 'Nez indépendante · Grasse'], ['n2', 'nez', 'Studio Olfactif Riviera', 'Laboratoire de création · Grasse'], ['n3', 'nez', 'Karim Benali', 'Nez indépendant · Paris'],
+    ['f1', 'fournisseur', 'Ningbo Crystal Glass', 'Chine · flacons · 25 à 35 j'], ['f2', 'fournisseur', 'Yuyao Spray Tech', 'Chine · pompes · 25 à 30 j'], ['f3', 'fournisseur', 'Guangzhou Caps', 'Chine · capots · 30 j'],
+    ['f4', 'fournisseur', 'Imprimerie du Rhône', 'France · étiquettes, plaques, étuis · 10 j'], ['f5', 'fournisseur', 'Cartonnages Provence', 'France · coffrets · 15 j'],
+    ['k1', 'conditionneur', 'Conditionnement Riviera', 'Grasse · remplissage et sertissage'], ['k2', 'conditionneur', 'Lab’Embal', 'Lyon · remplissage, mise sous étui'],
+  ].map(([id, type, nom, info]) => ({ id, type, nom, info }));
+  const PU = { a1: 0.85, a2: 1.4, a3: 0.62, a4: 0.32, a5: 0.28, a6: 0.35, a7: 0.95, a8: 1.1, a9: 0.75, a10: 0.45, a11: 0.12, a12: 0.68, a13: 2.4 };
+  const A = [
+    ['a1', 'Flacon', 'Flacon rond 50 ml, verre extra-blanc', 'FL-R50-EB', '#E9EEF0', 'f1', 1200, 300],
+    ['a2', 'Flacon', 'Flacon carré 100 ml, verre épais', 'FL-C100-EP', '#DDE6E3', 'f1', 40, 200],
+    ['a3', 'Flacon', 'Flacon cylindre 30 ml', 'FL-Y30', '#EEF1F1', 'f1', 600, 200],
+    ['a4', 'Pompe', 'Pompe FEA15 dorée', 'PO-15-OR', '#C9A24A', 'f2', 350, 300],
+    ['a5', 'Pompe', 'Pompe FEA15 argent', 'PO-15-AG', '#B9BEC3', 'f2', 900, 300],
+    ['a6', 'Pompe', 'Pompe FEA15 noire mate', 'PO-15-NM', '#26282A', 'f2', 0, 200],
+    ['a7', 'Capot', 'Capot zamac doré', 'CA-ZM-OR', '#B8913F', 'f3', 120, 200],
+    ['a8', 'Capot', 'Capot bois noyer', 'CA-BO-NO', '#6B4A2F', 'f3', 450, 150],
+    ['a9', 'Capot', 'Capot noir mat aimanté', 'CA-NM-AI', '#1E1F21', 'f3', 0, 150],
+    ['a10', 'Plaque', 'Plaque métal dorée gravée', 'PL-OR-GR', '#D4B25E', 'f4', 0, 0],
+    ['a11', 'Étiquette', 'Étiquette transparente sérigraphiée', 'ET-TR-SE', '#F4F4F2', 'f4', 0, 0],
+    ['a12', 'Étui', 'Étui carton 50 ml, dorure à chaud', 'EU-50-DO', '#2B3A36', 'f4', 0, 0],
+    ['a13', 'Coffret', 'Coffret aimanté 100 ml', 'CO-100-AI', '#3B2A22', 'f5', 0, 0],
+  ].map(([id, type, nom, ref, sw, four, libre, seuil]) => ({ id, type, nom, ref, sw, four, libre, seuil, pu: PU[id] }));
+  const L = (art, qte, st, cmd) => ({ id: uid(), art, qte, st, cmd: cmd || null });
+  const P = [
+    { id: 'p1', ref: 'AZK-26-011', nom: 'Ambre Nocturne', client: 'c1', etape: 3, echeance: D(12), qte: 800, vol: 50, conc: 20, cond: 'k1', via: 'client',
+      formules: [{ id: uid(), ref: 'CM-0412', nez: 'n1', date: D(-62), statut: 'refusee', note: 'Trop poudré en tête' }, { id: uid(), ref: 'CM-0419', nez: 'n1', date: D(-48), statut: 'refusee', note: 'Fond ambré trop sucré' }, { id: uid(), ref: 'CM-0427', nez: 'n1', date: D(-35), statut: 'validee', note: 'Validée par Inès le ' + fd(D(-30)) }],
+      jus: { kgCmd: 7.5, par: 'client', kgLivre: 7.5, dateLivre: D(-9) },
+      lignes: [L('a1', 800, 5), L('a4', 800, 5), L('a7', 800, 4), L('a10', 800, 3), L('a12', 800, 2, 'o2')],
+      notes: [{ d: D(-2), t: 'Imprimerie : les étuis sont partis, livraison prévue en fin de semaine. Penser à vérifier la dorure à réception.' }, { d: D(-9), t: 'Concentré CM-0427 livré par le fournisseur du client chez Conditionnement Riviera : 7,5 kg (bon n° 2210).' }],
+      taches: [{ id: uid(), t: 'Relancer l’imprimerie pour les étuis', done: false }, { id: uid(), t: 'Envoyer les plaques dorées au conditionneur', done: false }, { id: uid(), t: 'Valider le BAT de la plaque gravée', done: true }],
+      rdv: [{ id: uid(), d: D(3), h: '10:00', t: 'Point visuel étui avec Inès', lieu: 'Visio' }] },
+    { id: 'p2', ref: 'AZK-26-014', nom: 'Oud Majesté', client: 'c2', etape: 2, echeance: D(41), qte: 500, vol: 100, conc: 25, cond: 'k2', via: 'az',
+      formules: [{ id: uid(), ref: 'SOR-88', nez: 'n2', date: D(-28), statut: 'validee', note: 'Oud fumé, version 3' }, { id: uid(), ref: 'SOR-91', nez: 'n2', date: D(-6), statut: 'essai', note: 'Variante plus safranée demandée par Samir' }],
+      jus: { kgCmd: 12, par: 'az', kgLivre: 0, dateLivre: '' },
+      lignes: [L('a2', 500, 1, 'o3'), L('a6', 500, 2, 'o1'), L('a9', 500, 0), L('a13', 500, 0)],
+      notes: [{ d: D(-6), t: 'Samir hésite entre SOR-88 et SOR-91. On garde SOR-88 validée tant qu’il n’a pas tranché.' }],
+      taches: [{ id: uid(), t: 'Commander les capots noirs aimantés', done: false }, { id: uid(), t: 'Devis coffrets chez Cartonnages Provence', done: false }],
+      rdv: [{ id: uid(), d: D(6), h: '14:30', t: 'Choix final du jus avec Samir', lieu: 'Showroom Paris 8e' }] },
+    { id: 'p3', ref: 'AZK-26-016', nom: 'Fleur de Nour', client: 'c3', etape: 1, echeance: D(27), qte: 300, vol: 50, conc: 18, cond: 'k1', via: 'client',
+      formules: [{ id: uid(), ref: 'KB-07', nez: 'n3', date: D(-11), statut: 'essai', note: 'Fleur d’oranger, musc blanc' }, { id: uid(), ref: 'KB-08', nez: 'n3', date: D(-4), statut: 'essai', note: 'Même base, plus de néroli' }],
+      jus: { kgCmd: 0, par: 'client', kgLivre: 0, dateLivre: '' },
+      lignes: [L('a1', 300, 0), L('a5', 300, 0), L('a8', 300, 0), L('a11', 300, 0)],
+      notes: [{ d: D(-4), t: 'Échantillons KB-07 et KB-08 envoyés à Nour. Retour attendu sous une semaine.' }],
+      taches: [{ id: uid(), t: 'Relancer Nour pour son retour sur les essais', done: false }], rdv: [] },
+    { id: 'p4', ref: 'AZK-26-009', nom: 'Cèdre Blanc', client: 'c4', etape: 4, echeance: D(-6), qte: 1200, vol: 30, conc: 15, cond: 'k2', via: 'az',
+      formules: [{ id: uid(), ref: 'CM-0388', nez: 'n1', date: D(-90), statut: 'validee', note: '' }],
+      jus: { kgCmd: 5, par: 'az', kgLivre: 5, dateLivre: D(-30) },
+      lignes: [L('a3', 1200, 5), L('a5', 1200, 5), L('a8', 1200, 5), L('a11', 1200, 5)],
+      notes: [{ d: D(-6), t: '1 200 flacons livrés chez Lys & Cèdre. Facture soldée.' }], taches: [], rdv: [] },
+    { id: 'p5', ref: 'AZK-26-018', nom: 'Sable d’Or', client: 'c5', etape: 0, echeance: D(75), qte: 600, vol: 50, conc: 20, cond: '', via: 'az',
+      formules: [], jus: { kgCmd: 0, par: 'az', kgLivre: 0, dateLivre: '' }, lignes: [],
+      notes: [{ d: D(-1), t: 'Premier rendez-vous : univers solaire, ambre et fleur de tiaré. Flacon doré souhaité, budget 18 € par pièce.' }],
+      taches: [{ id: uid(), t: 'Envoyer le brief à Claire Morel', done: false }, { id: uid(), t: 'Proposer 3 flacons 50 ml', done: false }],
+      rdv: [{ id: uid(), d: D(1), h: '11:00', t: 'Présentation des pistes flacon', lieu: 'Atelier' }] },
+    { id: 'p6', ref: 'AZK-26-012', nom: 'Rose Saharienne', client: 'c1', etape: 3, echeance: D(19), qte: 400, vol: 50, conc: 20, cond: 'k1', via: 'client',
+      formules: [{ id: uid(), ref: 'CM-0433', nez: 'n1', date: D(-26), statut: 'validee', note: '' }],
+      jus: { kgCmd: 3.6, par: 'client', kgLivre: 2, dateLivre: D(-5) },
+      lignes: [L('a1', 400, 5), L('a5', 400, 3), L('a7', 400, 5), L('a12', 400, 5)],
+      notes: [{ d: D(-5), t: 'Livraison partielle du concentré : 2 kg sur 3,6 kg. Le reste arrive avec le prochain envoi du client.' }],
+      taches: [{ id: uid(), t: 'Envoyer les pompes argent au conditionneur', done: false }], rdv: [] },
+  ];
+  const O = [
+    { id: 'o1', num: 'CMD-2610-04', four: 'f2', date: D(-22), eta: D(5), st: 'transit', suivi: 'Fret maritime + camion, n° MSKU 7781', lignes: [{ art: 'a6', qte: 500, proj: 'p2' }] },
+    { id: 'o2', num: 'CMD-2610-07', four: 'f4', date: D(-12), eta: D(-1), st: 'transit', suivi: 'Colissimo 6A 1840 2291', lignes: [{ art: 'a12', qte: 800, proj: 'p1' }] },
+    { id: 'o3', num: 'CMD-2610-09', four: 'f1', date: D(-8), eta: D(24), st: 'commandee', suivi: '', lignes: [{ art: 'a2', qte: 500, proj: 'p2' }] },
+    { id: 'o4', num: 'CMD-2609-15', four: 'f1', date: D(-40), eta: D(-10), st: 'recue', suivi: '', lignes: [{ art: 'a1', qte: 2000, proj: null }] },
+  ];
+  const CH = {
+    p1: { pv: 9.5, jusKg: 0, encaisse: 3800, frais: [['Graphisme et DA (étui + plaque)', 'f', 900, 'Création', true], ['Conditionnement Riviera', 'u', 0.55, 'Conditionnement', false], ['Transport vers le conditionneur', 'f', 140, 'Transport', true]] },
+    p2: { pv: 16, jusKg: 145, encaisse: 4000, frais: [['Création olfactive Studio Riviera', 'f', 1200, 'Création', true], ['Fret Chine + dédouanement', 'f', 680, 'Transport', false], ['Lab’Embal, remplissage et mise en coffret', 'u', 0.85, 'Conditionnement', false]] },
+    p3: { pv: 8.9, jusKg: 0, encaisse: 800, frais: [['Échantillons et envois au client', 'f', 60, 'Création', true]] },
+    p4: { pv: 6.2, jusKg: 120, encaisse: 7440, frais: [['Création olfactive Claire Morel', 'f', 800, 'Création', true], ['Lab’Embal, remplissage', 'u', 0.45, 'Conditionnement', true], ['Fret Chine + dédouanement', 'f', 520, 'Transport', true]] },
+    p5: { pv: 0, jusKg: 0, encaisse: 0, frais: [] },
+    p6: { pv: 9.2, jusKg: 0, encaisse: 1840, frais: [['Conditionnement Riviera', 'u', 0.55, 'Conditionnement', false], ['Graphisme étui', 'f', 450, 'Création', true]] },
+  };
+  P.forEach(p => {
+    const c = CH[p.id];
+    p.chiffrage = { pv: c.pv, jusKg: c.jusKg, jusPaye: p.etape === 4, encaisse: c.encaisse, frais: c.frais.map(([lib, mode, montant, cat, paye]) => ({ id: uid(), lib, mode, montant, cat, paye })) };
+    p.lignes.forEach(l => { l.pu = PU[l.art]; l.paye = l.st >= 3; });
+  });
+  return { v: 2, contacts: C, articles: A, projets: P, commandes: O, seq: 19, cseq: 10 };
+}
+let S;
+try { S = JSON.parse(localStorage.getItem('azk-atelier')); } catch (e) { S = null; }
+if (!S || S.v !== 2) S = seed();
+const save = () => { try { localStorage.setItem('azk-atelier', JSON.stringify(S)); } catch (e) { } };
+
+const byId = (arr, id) => arr.find(x => x.id === id);
+const ct = id => byId(S.contacts, id) || { nom: '—', info: '' };
+const art = id => byId(S.articles, id);
+const proj = id => byId(S.projets, id);
+const need = p => p.qte * p.vol * (p.conc / 100) * 0.9 / 1000;
+const valid = p => p.formules.find(f => f.statut === 'validee');
+function kit(p) {
+  const v = valid(p), n = need(p);
+  const items = [{ label: 'Concentré ' + (v ? v.ref : '(aucune formule validée)'), ok: !!v && p.jus.kgLivre >= n - 0.001, st: v ? kg(p.jus.kgLivre) + ' / ' + kg(n) : 'à valider' }];
+  p.lignes.forEach(l => { const a = art(l.art); items.push({ label: a.nom, sw: a.sw, ok: l.st === 5, st: LST[l.st].n }); });
+  return { items, ok: items.filter(i => i.ok).length, total: items.length };
+}
+const active = () => S.projets.filter(p => p.etape < 4);
+
+/* ===================== Alertes ===================== */
+function alerts() {
+  const out = [];
+  active().forEach(p => {
+    const v = valid(p), n = need(p), c = ct(p.client).nom;
+    if (!v && p.etape >= 1 && days(p.echeance) <= 45) out.push({ s: 'warn', p: p.id, t: `${p.nom} : aucune formule validée`, d: `${c} · ${p.formules.filter(f => f.statut === 'essai').length} essai(s) en cours · échéance ${rel(p.echeance)}` });
+    if (v && p.etape >= 2 && p.jus.kgLivre < n - 0.001) out.push({ s: p.etape >= 3 ? 'stop' : 'warn', p: p.id, t: `${p.nom} : il manque ${kg(n - p.jus.kgLivre)} de concentré chez le conditionneur`, d: `${v.ref} · ${kg(p.jus.kgLivre)} livrés sur ${kg(n)} · commandé par ${p.jus.par === 'az' ? 'AZ Cosmétik' : 'le client'}` });
+    const ac = p.lignes.filter(l => l.st === 0);
+    if (ac.length && p.etape >= 1) out.push({ s: 'warn', p: p.id, t: `${p.nom} : ${ac.length} composant${ac.length > 1 ? 's' : ''} à commander`, d: ac.map(l => art(l.art).nom).join(', ') });
+    const at = p.lignes.filter(l => l.st === 3);
+    if (at.length && p.etape >= 2) out.push({ s: 'glass', p: p.id, t: `${p.nom} : ${at.length} composant${at.length > 1 ? 's' : ''} à envoyer au conditionneur`, d: at.map(l => art(l.art).nom).join(', ') + ' · à l’atelier' });
+  });
+  S.commandes.filter(o => o.st !== 'recue' && days(o.eta) < 0).forEach(o => out.push({ s: 'stop', o: o.id, t: `Commande ${o.num} en retard de ${-days(o.eta)} j`, d: `${ct(o.four).nom} · ${o.lignes.map(l => num(l.qte) + ' × ' + art(l.art).nom).join(', ')}` }));
+  const low = S.articles.filter(a => a.seuil && a.libre < a.seuil);
+  if (low.length) out.push({ s: 'warn', st: 1, t: `Stock bas : ${low.length} article${low.length > 1 ? 's' : ''} sous le seuil`, d: low.map(a => `${a.nom} (${num(a.libre)})`).join(', ') });
+  const ord = { stop: 0, warn: 1, glass: 2 };
+  return out.sort((a, b) => ord[a.s] - ord[b.s]);
+}
+
+/* ===================== Navigation ===================== */
+const NAV = [['tableau', 'Tableau de bord', 'home'], ['projets', 'Projets', 'proj'], ['stock', 'Stock', 'stock'], ['commandes', 'Commandes', 'cmd'], ['chiffrage', 'Chiffrage', 'euro'], ['agenda', 'Agenda', 'cal'], ['contacts', 'Contacts', 'users']];
+let route = 'tableau', cur = null, ptab = 'apercu', pfilter = 'actifs', stab = 'general';
+function go(r) {
+  r = (r || '').replace(/^#/, '');
+  if (r.startsWith('projet-') && proj(r.slice(7))) { cur = r.slice(7); route = 'projet'; }
+  else route = NAV.some(n => n[0] === r) ? r : 'tableau';
+  try { history.replaceState(null, '', '#' + (route === 'projet' ? 'projet-' + cur : route)); } catch (e) { }
+  render(); window.scrollTo(0, 0);
+}
+function renderNav() {
+  const now = route === 'projet' ? 'projets' : route, n = active().filter(p => { const a = nextAction(p); return a && !a.wait; }).length;
+  $('#nav').innerHTML = NAV.map(([k, l, i]) => `<button data-nav="${k}" ${k === now ? 'aria-current="page"' : ''}>${ic(i)}${l}${k === 'tableau' && n ? `<span class="ct">${n}</span>` : ''}</button>`).join('');
+  $('#mnav').innerHTML = NAV.filter(x => x[0] !== 'contacts' && x[0] !== 'agenda').map(([k, l, i]) => `<button data-nav="${k}" ${k === now ? 'aria-current="page"' : ''}>${ic(i)}${l === 'Tableau de bord' ? 'Accueil' : l}</button>`).join('');
+}
+document.addEventListener('click', e => {
+  const n = e.target.closest('[data-nav]'); if (n) return go(n.dataset.nav);
+  const p = e.target.closest('[data-p]'); if (p) { ptab = p.dataset.tab || 'apercu'; return go('projet-' + p.dataset.p); }
+});
+function render() { renderNav(); ({ tableau: vDash, projets: vProjets, projet: vProjet, stock: vStock, commandes: vCmd, chiffrage: vChiffrage, agenda: vAgenda, contacts: vContacts })[route](); }
+
+/* ===================== Composants d'affichage ===================== */
+const steps = p => `<div class="steps" aria-label="Étape : ${ETAPES[p.etape]}">${ETAPES.map((_, i) => `<i class="${i < p.etape ? 'on' : i === p.etape ? 'now' : ''}"></i>`).join('')}</div>`;
+const gauge = p => { const k = kit(p); const pc = k.total ? k.ok / k.total * 100 : 0; return `<div class="gauge"><span class="mute">Kit conditionneur</span><div class="bar"><i class="${k.ok === k.total && k.total > 1 ? 'full' : ''}" style="width:${pc}%"></i></div><b class="tnum">${k.ok}/${k.total}</b></div>`; };
+const track = st => `<div class="track">${LST.map((_, i) => `<i class="${st === 5 ? 'done' : i <= st ? 'on' : ''}"></i>`).join('')}</div><span class="trk-l">${LST[st].n}</span>`;
+const artCell = a => `<div class="art"><span class="sw" style="background:${a.sw}"></span><div style="min-width:0"><b>${E(a.nom)}</b><small><span class="ref">${E(a.ref)}</span> · ${E(ct(a.four).nom)}</small></div></div>`;
+const cal = s => { const x = new Date(s + 'T12:00'); return `<div class="cal"><span>${x.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')}</span><b>${x.getDate()}</b></div>`; };
+
+/* ===================== Prochaine action (une seule par projet) ===================== */
+function nextAction(p) {
+  const v = valid(p), n = need(p), cn = ct(p.client).nom;
+  if (p.etape === 4) return p.site ? null : { t: 'Proposer un site internet à ' + cn, d: 'Le parfum est livré : la marque a besoin d’une boutique en ligne pour le vendre.', b: 'Recommander Les Monsieurs', a: ['site'] };
+  if (p.etape === 0 && !p.formules.length) return { t: 'Envoyer le brief au nez', d: 'Ajoutez la première formule dès que le nez vous l’envoie.', b: 'Ajouter une formule', a: ['tab', 'jus'] };
+  if (!v) return { t: p.formules.length ? 'Choisir la formule validée' : 'Ajouter la première formule', d: p.formules.length ? p.formules.length + ' formule(s) en test. Validez celle retenue par ' + cn + '.' : 'Rien reçu du nez pour l’instant.', b: p.formules.length ? 'Voir les formules' : 'Ajouter une formule', a: ['tab', 'jus'] };
+  const l0 = p.lignes.find(l => l.st === 0); if (l0) return { t: 'Commander : ' + art(l0.art).nom, d: num(l0.qte) + ' pièces pour ' + cn + ' · ' + ct(art(l0.art).four).nom, b: 'Commander', a: ['order', l0.id] };
+  if (p.jus.kgLivre < n - 0.001) return { t: 'Concentré ' + v.ref + ' : il manque ' + kg(n - p.jus.kgLivre), d: 'Notez la livraison chez ' + (p.cond ? ct(p.cond).nom : 'le conditionneur') + ' dès qu’elle est faite.', b: 'Noter une livraison', a: ['tab', 'jus'] };
+  const l3 = p.lignes.find(l => l.st === 3); if (l3) return { t: 'Envoyer au conditionneur : ' + art(l3.art).nom, d: num(l3.qte) + ' pièces sont à l’atelier.', b: 'C’est envoyé', a: ['adv', l3.id] };
+  const l4 = p.lignes.find(l => l.st === 4); if (l4) return { t: 'Le conditionneur a-t-il reçu : ' + art(l4.art).nom + ' ?', d: 'Confirmez quand ' + (p.cond ? ct(p.cond).nom : 'il') + ' vous le dit.', b: 'Oui, c’est reçu', a: ['adv', l4.id] };
+  const l12 = p.lignes.find(l => l.st === 1 || l.st === 2); if (l12) { const o = l12.cmd && byId(S.commandes, l12.cmd); return { t: 'En attente : ' + art(l12.art).nom, d: o ? 'Arrivée prévue ' + fd(o.eta) + ' (' + rel(o.eta) + ')' : 'Commande en cours', b: 'C’est arrivé', a: ['recv', l12.id], wait: true }; }
+  if (!p.lignes.length) return { t: 'Lister les composants', d: 'Flacon, pompe, capot, étiquette, étui…', b: 'Ajouter les composants', a: ['tab', 'composants'] };
+  if (p.etape < 3) return { t: 'Tout est chez le conditionneur', d: 'Le kit est complet. Vous pouvez lancer la production.', b: 'Lancer la production', a: ['etape', 3] };
+  return { t: 'Production en cours', d: 'Marquez le projet livré quand les flacons sont chez ' + cn + '.', b: 'Marquer livré', a: ['etape', 4] };
+}
+function runAction(p, a) {
+  const [k, x] = a;
+  if (k === 'tab') { ptab = x; cur = p.id; route = 'projet'; return go('projet-' + p.id); }
+  if (k === 'order') return orderModal(p, p.lignes.find(l => l.id === x));
+  if (k === 'adv') return advance(p, p.lignes.find(l => l.id === x));
+  if (k === 'recv') { const l = p.lignes.find(z => z.id === x); l.st = 2; return advance(p, l); }
+  if (k === 'etape') { p.etape = x; p.notes.unshift({ d: TODAY, t: 'Étape : ' + ETAPES[x] + '.' }); save(); toast(x === 4 ? 'Projet livré. Bravo !' : 'Production lancée'); return render(); }
+  if (k === 'site') return siteModal(p);
+}
+function siteModal(p) {
+  const c = ct(p.client);
+  openModal(`<h2>Un site pour ${E(c.nom)} ?</h2>
+    <p style="margin:0 0 12px">Le parfum est prêt. Pour le vendre, la marque a besoin d’une boutique en ligne. Les Monsieurs crée des sites pour les marques de parfum et de cosmétique, et vous tient au courant de l’avancement.</p>
+    <form class="form" id="sf"><label class="f"><span>Message pour Hatim (facultatif)</span><textarea id="s-m" placeholder="ex. La cliente veut lancer ses ventes pour Noël, budget à discuter.">${E(c.nom)} vient de recevoir ${num(p.qte)} flacons de ${E(p.nom)}.</textarea></label>
+    <div class="end"><button type="button" class="btn ghost" data-close>Plus tard</button><button class="btn amb" type="submit">Recommander le client</button></div></form>`);
+  $('#sf').onsubmit = e => { e.preventDefault(); p.site = { d: TODAY, m: $('#s-m').value.trim() }; p.notes.unshift({ d: TODAY, t: 'Client recommandé à Les Monsieurs pour son site internet.' }); save(); closeModal(); toast('Recommandation enregistrée. Dans la version finale, Hatim la reçoit directement.'); render(); };
+}
+const actionCard = (p, compact) => { const a = nextAction(p); if (!a) return ''; return `<div class="next ${a.wait ? 'wait' : ''} ${a.a[0] === 'site' ? 'site' : ''}">
+  <div class="nx-t">${compact ? `<button class="nx-p" data-p="${p.id}">${E(p.nom)} <small>· ${E(ct(p.client).nom)}</small></button>` : '<span class="lbl">Prochaine étape</span>'}<b>${E(a.t)}</b><small>${E(a.d)}</small></div>
+  <button class="btn ${a.a[0] === 'site' ? 'amb' : a.wait ? '' : 'pri'}" data-run="${p.id}">${E(a.b)}</button></div>`; };
+document.addEventListener('click', e => { const b = e.target.closest('[data-run]'); if (!b) return; const p = proj(b.dataset.run), a = nextAction(p); if (a) runAction(p, a.a); });
+
+/* ===================== Tableau de bord ===================== */
+function vDash() {
+  const act = active().sort((a, b) => a.echeance.localeCompare(b.echeance));
+  const todo = act.map(p => [p, nextAction(p)]).filter(([p, a]) => a && !a.wait), wait = act.map(p => [p, nextAction(p)]).filter(([p, a]) => a && a.wait);
+  const late = S.commandes.filter(o => o.st !== 'recue' && days(o.eta) < 0), low = S.articles.filter(a => a.seuil && a.libre < a.seuil);
+  const sites = S.projets.filter(p => p.etape === 4 && !p.site), sent = S.projets.filter(p => p.site);
+  let hide = false; try { hide = localStorage.getItem('azk-welcome') === '0'; } catch (e) { }
+  $('#view').innerHTML = `
+  <div class="head"><div><h1>Bonjour</h1><p>${fdl(TODAY).replace(/^./, c => c.toUpperCase())} · ${act.length} projets en cours</p></div>
+    <div class="act"><button class="btn pri" id="np">${ic('plus')}Nouveau projet</button></div></div>
+  ${hide ? '' : `<div class="welcome"><div><b>Comment ça marche</b><ol><li><span>1</span>Créez un projet par parfum et par client.</li><li><span>2</span>Chaque projet vous dit quoi faire ensuite : un seul bouton à la fois.</li><li><span>3</span>Le cadre « Le conditionneur a-t-il tout ? » passe au vert quand le kit est complet.</li></ol></div><button class="btn sm ghost" id="hw">J’ai compris</button></div>`}
+  <div class="grid g21">
+    <div><h2 class="h2">À faire maintenant <small>${todo.length} action${todo.length > 1 ? 's' : ''}</small></h2>
+      <div class="nexts">${todo.map(([p]) => actionCard(p, true)).join('') || '<p class="empty">Tout est à jour. Rien à faire pour l’instant.</p>'}</div>
+      ${wait.length ? `<h2 class="h2" style="margin-top:22px">En attente de livraison <small>${wait.length}</small></h2><div class="nexts">${wait.map(([p]) => actionCard(p, true)).join('')}</div>` : ''}
+    </div>
+    <div class="grid" style="align-content:start">
+      <div><h2 class="h2">Cette semaine</h2><div class="card">${agendaList(upcoming().filter(x => days(x.d) <= 7), 6) || '<p class="empty">Rien de prévu.</p>'}</div></div>
+      ${late.length || low.length ? `<div><h2 class="h2">À surveiller</h2><div class="todo">
+        ${late.map(o => `<button data-nav="commandes"><span class="dot d-stop"></span><span><b>${o.num} en retard de ${-days(o.eta)} j</b><small>${E(ct(o.four).nom)} · ${o.lignes.map(l => num(l.qte) + ' × ' + E(art(l.art).nom)).join(', ')}</small></span></button>`).join('')}
+        ${low.length ? `<button data-nav="stock"><span class="dot d-warn"></span><span><b>Stock bas : ${low.length} article${low.length > 1 ? 's' : ''}</b><small>${low.map(a => E(a.nom) + ' (' + num(a.libre) + ')').join(', ')}</small></span></button>` : ''}
+      </div></div>` : ''}
+      <div class="lm"><div class="lbl">Après la livraison</div>
+        ${sites.length ? `<p>${sites.length === 1 ? 'Ce client a' : 'Ces clients ont'} un parfum prêt à vendre, sans boutique en ligne :</p>${sites.map(p => `<div class="lm-r"><span><b>${E(ct(p.client).nom)}</b><small>${E(p.nom)} · livré</small></span><button class="btn sm amb" data-run="${p.id}">Recommander</button></div>`).join('')}` : '<p>Quand un projet est livré, recommandez le client pour son site internet en un clic.</p>'}
+        ${sent.length ? `<small class="mute">${sent.length} client${sent.length > 1 ? 's' : ''} déjà recommandé${sent.length > 1 ? 's' : ''}</small>` : ''}
+      </div>
+    </div>
+  </div>`;
+  $('#np').onclick = newProjet;
+  if ($('#hw')) $('#hw').onclick = () => { try { localStorage.setItem('azk-welcome', '0'); } catch (e) { } vDash(); };
+}
+
+/* ===================== Projets ===================== */
+function vProjets() {
+  const F = [['actifs', 'En cours'], ...ETAPES.map((e, i) => [String(i), e]), ['tous', 'Tous']];
+  const list = S.projets.filter(p => pfilter === 'tous' ? true : pfilter === 'actifs' ? p.etape < 4 : p.etape === +pfilter).sort((a, b) => a.echeance.localeCompare(b.echeance));
+  $('#view').innerHTML = `
+  <div class="head"><div><h1>Projets</h1><p>Un projet = un parfum pour un client, du brief à la livraison.</p></div><div class="act"><button class="btn pri" id="np">${ic('plus')}Nouveau projet</button></div></div>
+  <div class="chips">${F.map(([k, l]) => `<button class="chip" data-f="${k}" aria-pressed="${pfilter === k}">${l}</button>`).join('')}</div>
+  <div class="pcards">${list.map(p => { const v = valid(p), dd = days(p.echeance); return `<button class="pcard" data-p="${p.id}">
+      <div class="row"><span class="ref">${p.ref}</span><span class="pill ${p.etape === 4 ? 'p-ok' : 'p-glass'}">${ETAPES[p.etape]}</span></div>
+      <div><h3>${E(p.nom)}</h3><div class="mute" style="font-size:14px;margin-top:3px">${E(ct(p.client).nom)} · ${num(p.qte)} × ${p.vol} ml · ${p.conc} %</div></div>
+      ${steps(p)}
+      <div class="row"><span>Jus : ${v ? `<span class="ref">${v.ref}</span> <span class="pill p-ok">validé</span>` : `<span class="pill p-warn">${p.formules.length ? p.formules.length + ' essai(s)' : 'pas de formule'}</span>`}</span><span class="${p.etape < 4 && dd < 14 ? '' : 'mute'}">${p.etape === 4 ? 'livré' : 'échéance ' + fd(p.echeance)}</span></div>
+      ${gauge(p)}${(() => { const a = nextAction(p); return a ? `<div class="pc-next">→ ${E(a.t)}</div>` : ''; })()}</button>`; }).join('') || '<p class="empty">Aucun projet à cette étape.</p>'}</div>`;
+  $$('[data-f]').forEach(b => b.onclick = () => { pfilter = b.dataset.f; vProjets(); });
+  $('#np').onclick = newProjet;
+}
+
+/* ===================== Fiche projet ===================== */
+function vProjet() {
+  const p = proj(cur); if (!p) return go('projets');
+  const v = valid(p), k = kit(p);
+  const T = [['apercu', 'Aperçu'], ['jus', 'Jus'], ['composants', 'Composants'], ['chiffrage', 'Chiffrage'], ['journal', 'Notes et RDV']];
+  $('#view').innerHTML = `
+  <button class="back" data-nav="projets">${ic('back')}Tous les projets</button>
+  <div class="phead">
+    <div><span class="ref">${p.ref}</span><h1 style="margin-top:8px">${E(p.nom)}</h1>
+      <div class="meta"><span>Client <b>${E(ct(p.client).nom)}</b></span><span><b>${num(p.qte)}</b> flacons de <b>${p.vol} ml</b> à <b>${p.conc} %</b></span><span>Conditionneur <b>${p.cond ? E(ct(p.cond).nom) : 'à choisir'}</b></span><span>Échéance <b>${fd(p.echeance)}</b> (${rel(p.echeance)})</span></div></div>
+    <div class="valid-ref ${v ? '' : 'none'}"><div class="lbl">${v ? 'Référence validée' : 'Référence validée'}</div><span class="mono">${v ? E(v.ref) : 'Aucune pour l’instant'}</span><small class="mute">${v ? E(ct(v.nez).nom) + ' · reçue le ' + fd(v.date) : p.formules.length + ' formule(s) en test'}</small></div>
+  </div>
+  <div class="stepper">${ETAPES.map((e, i) => `<button data-et="${i}" class="${i < p.etape ? 'on' : i === p.etape ? 'now' : ''}" aria-pressed="${i === p.etape}"><i></i>${e}</button>`).join('')}</div>
+  ${actionCard(p) || (p.site ? `<div class="next site"><div class="nx-t"><span class="lbl">Projet terminé</span><b>Client recommandé pour son site internet le ${fd(p.site.d)}</b><small>Merci ! Hatim prend le relais avec ${E(ct(p.client).nom)}.</small></div></div>` : '')}
+  <div class="tabs" role="tablist">${T.map(([key, l]) => `<button role="tab" data-t="${key}" aria-selected="${ptab === key}">${l}</button>`).join('')}</div>
+  <div id="ptab"></div>`;
+  $$('[data-et]').forEach(b => b.onclick = () => { p.etape = +b.dataset.et; save(); toast('Étape : ' + ETAPES[p.etape]); vProjet(); renderNav(); });
+  $$('[data-t]').forEach(b => b.onclick = () => { ptab = b.dataset.t; vProjet(); });
+  ({ apercu: tApercu, jus: tJus, composants: tComp, chiffrage: tChiffrage, journal: tJournal })[ptab](p);
+}
+function tApercu(p) {
+  const k = kit(p), al = alerts().filter(a => a.p === p.id), nx = upcoming().filter(x => x.p === p.id).slice(0, 3);
+  $('#ptab').innerHTML = `<div class="grid g21">
+    <div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:10px"><h2 style="font-size:20px">Le conditionneur a-t-il tout ?</h2><span class="pill ${k.ok === k.total && k.total > 1 ? 'p-ok' : 'p-warn'}">${k.ok} sur ${k.total} éléments</span></div>
+      <p class="mute" style="margin:0 0 10px;font-size:14px">${p.cond ? E(ct(p.cond).nom) + ' · ' + E(ct(p.cond).info) : 'Aucun conditionneur choisi.'}</p>
+      <div class="kit">${k.items.map(i => `<div class="${i.ok ? 'ok' : 'ko'}">${i.sw ? `<span class="sw" style="background:${i.sw}"></span>` : '<span class="sw" style="background:var(--amber)"></span>'}<span>${E(i.label)}</span><span class="st">${i.ok ? '✓ ' : ''}${E(i.st)}</span></div>`).join('')}</div>
+      ${p.lignes.length ? '' : `<p class="empty">Aucun composant listé. <button class="btn sm" data-t2="composants">Ajouter les composants</button></p>`}</div>
+    <div class="grid" style="align-content:start">
+      <div class="card"><div class="lbl" style="margin-bottom:6px">À venir</div>${agendaList(nx, 3) || '<p class="empty" style="padding:0">Aucun rendez-vous prévu.</p>'}</div>
+      <div class="card"><div class="lbl" style="margin-bottom:6px">Dernière note</div>${p.notes[0] ? `<div class="note"><small>${fd(p.notes[0].d)}</small><p>${E(p.notes[0].t)}</p></div>` : '<p class="empty" style="padding:0">Aucune note.</p>'}</div>
+    </div></div>`;
+  $$('[data-t2]').forEach(b => b.onclick = () => { ptab = b.dataset.t2; vProjet(); });
+}
+function tJus(p) {
+  const v = valid(p), n = need(p), pc = Math.min(100, n ? p.jus.kgLivre / n * 100 : 0);
+  const nez = S.contacts.filter(c => c.type === 'nez');
+  $('#ptab').innerHTML = `
+  <div class="card">
+    <div class="kg">
+      <div><div class="lbl">Concentré nécessaire</div><div class="v tnum">${kg(n).replace(' kg', '')}<small> kg</small></div><div class="formula">${num(p.qte)} × ${p.vol} ml × ${p.conc} % × densité 0,9</div></div>
+      <div><div class="lbl">Commandé</div><div class="v tnum">${kg(p.jus.kgCmd).replace(' kg', '')}<small> kg</small></div><div class="formula">par ${p.jus.par === 'az' ? 'AZ Cosmétik' : 'le client'}${p.jus.kgCmd && p.jus.kgCmd < n ? ' · insuffisant' : ''}</div></div>
+      <div><div class="lbl">Livré au conditionneur</div><div class="v tnum">${kg(p.jus.kgLivre).replace(' kg', '')}<small> kg</small></div><div class="formula">${p.jus.dateLivre ? 'le ' + fd(p.jus.dateLivre) + ' · ' : ''}${p.cond ? E(ct(p.cond).nom) : 'conditionneur à choisir'}</div></div>
+    </div>
+    <div class="prog" aria-label="Concentré livré"><i class="${pc >= 99.9 ? 'full' : ''}" style="width:${pc}%"></i></div>
+    <p style="margin:10px 0 0;font-size:14px">${!v ? '<span class="pill p-warn">Aucune formule validée</span> Validez une référence avant de lancer la commande de concentré.' : p.jus.kgLivre >= n - 0.001 ? `<span class="pill p-ok">Complet</span> Le conditionneur a reçu tout le concentré <span class="ref">${E(v.ref)}</span>.` : `<span class="pill p-stop">Il manque ${kg(n - p.jus.kgLivre)}</span> de <span class="ref">${E(v.ref)}</span> chez le conditionneur.`}</p>
+    <form class="inline" id="jf" style="margin-top:14px;border-top:1px dashed var(--line);padding-top:14px">
+      <label class="f" style="width:120px"><span>Commandé (kg)</span><input id="j-cmd" type="number" min="0" step="0.1" value="${p.jus.kgCmd}"></label>
+      <label class="f" style="width:150px"><span>Commandé par</span><select id="j-par"><option value="client" ${p.jus.par === 'client' ? 'selected' : ''}>Le client</option><option value="az" ${p.jus.par === 'az' ? 'selected' : ''}>AZ Cosmétik</option></select></label>
+      <label class="f" style="width:120px"><span>Livré (kg)</span><input id="j-liv" type="number" min="0" step="0.1" value="${p.jus.kgLivre}"></label>
+      <label class="f" style="width:160px"><span>Date de livraison</span><input id="j-date" type="date" value="${p.jus.dateLivre}"></label>
+      <button class="btn pri" type="submit">Enregistrer</button>
+    </form>
+  </div>
+  <div class="sec"><h2>Formules reçues des nez <small>une seule référence peut être validée</small></h2>
+    <div class="card tbl-wrap"><table class="tbl"><thead><tr><th>Référence</th><th>Nez</th><th>Reçue le</th><th>Commentaire</th><th>Statut</th><th></th></tr></thead><tbody>
+    ${p.formules.slice().sort((a, b) => b.date.localeCompare(a.date)).map(f => `<tr><td><span class="ref">${E(f.ref)}</span></td><td>${E(ct(f.nez).nom)}</td><td class="tnum">${fd(f.date)}</td><td class="mute" style="min-width:180px">${E(f.note)}</td><td><span class="pill ${FST[f.statut][1]}">${FST[f.statut][0]}</span></td>
+      <td style="white-space:nowrap">${f.statut !== 'validee' ? `<button class="btn sm" data-val="${f.id}">Valider</button>` : ''} ${f.statut === 'essai' ? `<button class="btn sm ghost" data-ref="${f.id}">Refuser</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="6" class="empty">Aucune formule reçue pour l’instant.</td></tr>'}
+    </tbody></table></div>
+    <form class="card inline" id="ff" style="margin-top:12px">
+      <label class="f" style="width:140px"><span>Référence</span><input id="f-ref" required placeholder="ex. CM-0440"></label>
+      <label class="f" style="width:200px"><span>Nez</span><select id="f-nez">${nez.map(c => `<option value="${c.id}">${E(c.nom)}</option>`).join('')}</select></label>
+      <label class="f" style="flex:1;min-width:180px"><span>Commentaire</span><input id="f-note" placeholder="ex. plus boisé, moins sucré"></label>
+      <button class="btn" type="submit">${ic('plus')}Ajouter la formule</button>
+    </form></div>`;
+  $('#jf').onsubmit = e => { e.preventDefault(); p.jus.kgCmd = Math.max(0, +$('#j-cmd').value || 0); p.jus.par = $('#j-par').value; p.jus.kgLivre = Math.max(0, +$('#j-liv').value || 0); p.jus.dateLivre = $('#j-date').value; save(); toast('Concentré mis à jour'); vProjet(); renderNav(); };
+  $('#ff').onsubmit = e => { e.preventDefault(); const r = $('#f-ref').value.trim().toUpperCase(); if (!r) return; p.formules.push({ id: uid(), ref: r, nez: $('#f-nez').value, date: TODAY, statut: 'essai', note: $('#f-note').value.trim() }); p.notes.unshift({ d: TODAY, t: `Formule ${r} reçue de ${ct($('#f-nez').value).nom}.` }); save(); toast('Formule ' + r + ' ajoutée'); vProjet(); };
+  $$('[data-val]').forEach(b => b.onclick = () => { const f = p.formules.find(x => x.id === b.dataset.val); p.formules.forEach(x => { if (x.statut === 'validee') x.statut = 'remplacee'; }); f.statut = 'validee'; p.notes.unshift({ d: TODAY, t: `Formule ${f.ref} validée.` }); if (p.etape < 2) p.etape = 2; save(); toast(f.ref + ' est la référence validée'); vProjet(); renderNav(); });
+  $$('[data-ref]').forEach(b => b.onclick = () => { const f = p.formules.find(x => x.id === b.dataset.ref); f.statut = 'refusee'; save(); toast(f.ref + ' refusée'); vProjet(); });
+}
+function tComp(p) {
+  $('#ptab').innerHTML = `
+  <div class="card tbl-wrap"><table class="tbl"><thead><tr><th>Composant</th><th class="n">Quantité</th><th>Où en est-il ?</th><th>Commande</th><th></th></tr></thead><tbody>
+  ${p.lignes.map(l => { const a = art(l.art), o = l.cmd ? byId(S.commandes, l.cmd) : null, nx = LST[l.st].next, canStock = l.st === 0 && a.libre >= l.qte;
+    return `<tr><td>${artCell(a)}</td><td class="n">${num(l.qte)}</td><td style="min-width:200px">${track(l.st)}</td>
+      <td>${o ? `<span class="ref">${o.num}</span><br><small class="mute">${o.st === 'recue' ? 'reçue' : 'arrivée prévue ' + fd(o.eta)}</small>` : '<span class="mute">—</span>'}</td>
+      <td style="white-space:nowrap;text-align:right">${canStock ? `<button class="btn sm" data-stk="${l.id}" title="${num(a.libre)} en stock libre">Prendre en stock</button> ` : ''}${nx ? `<button class="btn sm ${l.st === 3 ? 'amb' : 'pri'}" data-adv="${l.id}">${nx}</button>` : `<span class="pill p-ok">${ic('check')} Livré</span>`}</td></tr>`; }).join('') || '<tr><td colspan="5" class="empty">Aucun composant. Ajoutez flacon, pompe, capot, étiquette, étui…</td></tr>'}
+  </tbody></table></div>
+  <form class="card inline" id="lf" style="margin-top:12px">
+    <label class="f" style="flex:1;min-width:220px"><span>Article</span><select id="l-art">${S.articles.map(a => `<option value="${a.id}">${E(a.type)} · ${E(a.nom)} (${num(a.libre)} en stock)</option>`).join('')}</select></label>
+    <label class="f" style="width:120px"><span>Quantité</span><input id="l-qte" type="number" min="1" value="${p.qte}"></label>
+    <button class="btn" type="submit">${ic('plus')}Ajouter au projet</button>
+  </form>
+  <p class="mute" style="font-size:13.5px">« Prendre en stock » réserve des pièces du stock général pour ce client. Elles passent directement en « Reçu à l’atelier ».</p>`;
+  $('#lf').onsubmit = e => { e.preventDefault(); p.lignes.push({ id: uid(), art: $('#l-art').value, qte: Math.max(1, +$('#l-qte').value || 1), st: 0, cmd: null, pu: art($('#l-art').value).pu || 0, paye: false }); save(); toast('Composant ajouté'); vProjet(); };
+  $$('[data-stk]').forEach(b => b.onclick = () => { const l = p.lignes.find(x => x.id === b.dataset.stk), a = art(l.art); a.libre -= l.qte; l.st = 3; p.notes.unshift({ d: TODAY, t: `${num(l.qte)} × ${a.nom} pris dans le stock général.` }); save(); toast(num(l.qte) + ' pièces réservées pour ' + ct(p.client).nom); vProjet(); renderNav(); });
+  $$('[data-adv]').forEach(b => b.onclick = () => { const l = p.lignes.find(x => x.id === b.dataset.adv); if (l.st === 0) return orderModal(p, l); advance(p, l); });
+}
+function advance(p, l) {
+  const a = art(l.art); l.st = Math.min(5, l.st + 1);
+  const msg = { 2: 'en transit', 3: 'reçu à l’atelier', 4: 'envoyé à ' + ct(p.cond).nom, 5: 'reçu par ' + ct(p.cond).nom }[l.st];
+  p.notes.unshift({ d: TODAY, t: `${num(l.qte)} × ${a.nom} : ${msg}.` });
+  if (l.cmd) { const o = byId(S.commandes, l.cmd); if (o && l.st === 2 && o.st === 'commandee') o.st = 'transit'; if (o && l.st >= 3) o.st = 'recue'; }
+  save(); toast(a.nom + ' : ' + msg); render();
+}
+function tJournal(p) {
+  $('#ptab').innerHTML = `<div class="grid g2">
+    <div class="card"><h2 style="font-size:20px;margin-bottom:10px">Journal du projet</h2>
+      <form id="nf" class="form"><label class="f"><span>Nouvelle note</span><textarea id="n-t" placeholder="Ce qui a été fait, décidé, ce qui bloque…"></textarea></label><div><button class="btn pri" type="submit">Ajouter la note</button></div></form>
+      <div class="notes" style="margin-top:14px">${p.notes.map(n => `<div class="note"><small>${fd(n.d)} · ${rel(n.d)}</small><p>${E(n.t)}</p></div>`).join('') || '<p class="empty">Aucune note.</p>'}</div></div>
+    <div class="grid" style="align-content:start">
+      <div class="card"><h2 style="font-size:20px;margin-bottom:10px">Tâches</h2>
+        <div class="tasks">${p.taches.map(t => `<label class="${t.done ? 'done' : ''}"><input type="checkbox" data-tk="${t.id}" ${t.done ? 'checked' : ''}><span>${E(t.t)}</span></label>`).join('') || '<p class="empty">Aucune tâche.</p>'}</div>
+        <form id="tf" class="inline" style="margin-top:10px"><label class="f" style="flex:1;min-width:160px"><span>Nouvelle tâche</span><input id="t-t" placeholder="ex. Relancer le fournisseur"></label><button class="btn" type="submit">Ajouter</button></form></div>
+      <div class="card"><h2 style="font-size:20px;margin-bottom:6px">Rendez-vous</h2>
+        ${p.rdv.slice().sort((a, b) => a.d.localeCompare(b.d)).map(r => `<div class="rdv">${cal(r.d)}<div class="t"><b>${E(r.t)}</b><small>${fdl(r.d)} · ${E(r.h)} · ${E(r.lieu)}</small></div></div>`).join('') || '<p class="empty">Aucun rendez-vous.</p>'}
+        <form id="rf" class="form" style="margin-top:10px"><label class="f"><span>Objet</span><input id="r-t" required placeholder="ex. Validation du flacon avec la cliente"></label>
+          <div class="two"><label class="f"><span>Date</span><input id="r-d" type="date" required value="${D(2)}"></label><label class="f"><span>Heure</span><input id="r-h" type="time" value="10:00"></label></div>
+          <label class="f"><span>Lieu</span><input id="r-l" placeholder="Atelier, visio, chez le client…"></label><div><button class="btn" type="submit">Planifier</button></div></form></div>
+    </div></div>`;
+  $('#nf').onsubmit = e => { e.preventDefault(); const t = $('#n-t').value.trim(); if (!t) return; p.notes.unshift({ d: TODAY, t }); save(); toast('Note ajoutée'); vProjet(); };
+  $('#tf').onsubmit = e => { e.preventDefault(); const t = $('#t-t').value.trim(); if (!t) return; p.taches.push({ id: uid(), t, done: false }); save(); vProjet(); };
+  $$('[data-tk]').forEach(c => c.onchange = () => { const t = p.taches.find(x => x.id === c.dataset.tk); t.done = c.checked; save(); vProjet(); });
+  $('#rf').onsubmit = e => { e.preventDefault(); p.rdv.push({ id: uid(), t: $('#r-t').value.trim(), d: $('#r-d').value, h: $('#r-h').value, lieu: $('#r-l').value.trim() || 'À préciser' }); save(); toast('Rendez-vous planifié'); vProjet(); };
+}
+
+/* ===================== Chiffrage ===================== */
+const eur = n => (Math.round(n * 100) / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+const eur0 = n => Math.round(n).toLocaleString('fr-FR') + ' €';
+const CATS = [['Concentré', 'var(--amber)'], ['Flacons', '#5E8C82'], ['Pompes et capots', '#9AA7A2'], ['Packaging', '#B98F5B'], ['Création', '#7C6A9E'], ['Conditionnement', 'var(--glass)'], ['Transport', '#C26B4F']];
+const catOf = a => a.type === 'Flacon' ? 'Flacons' : (a.type === 'Pompe' || a.type === 'Capot') ? 'Pompes et capots' : 'Packaging';
+function costs(p) {
+  const c = p.chiffrage, rows = [];
+  const kgJ = Math.max(p.jus.kgCmd, need(p));
+  if (c.jusKg > 0) rows.push({ k: 'jus', lib: 'Concentré ' + (valid(p) ? valid(p).ref : ''), cat: 'Concentré', q: kgJ, unit: 'kg', pu: c.jusKg, tot: kgJ * c.jusKg, paye: c.jusPaye });
+  p.lignes.forEach(l => { const a = art(l.art); rows.push({ k: 'l', id: l.id, lib: a.nom, cat: catOf(a), q: l.qte, unit: 'pcs', pu: l.pu || 0, tot: l.qte * (l.pu || 0), paye: !!l.paye, sw: a.sw }); });
+  c.frais.forEach(f => rows.push({ k: 'f', id: f.id, lib: f.lib, cat: f.cat, q: f.mode === 'u' ? p.qte : 1, unit: f.mode === 'u' ? 'pcs' : 'forfait', pu: f.montant, tot: (f.mode === 'u' ? p.qte : 1) * f.montant, paye: !!f.paye }));
+  const total = rows.reduce((s, r) => s + r.tot, 0), paye = rows.filter(r => r.paye).reduce((s, r) => s + r.tot, 0);
+  const ca = c.pv * p.qte, marge = ca - total;
+  return { rows, total, paye, ca, marge, taux: ca ? marge / ca * 100 : 0, unit: p.qte ? total / p.qte : 0, coef: total ? ca / total : 0 };
+}
+function breakdown(rows, total) {
+  const by = CATS.map(([n, col]) => [n, col, rows.filter(r => r.cat === n).reduce((s, r) => s + r.tot, 0)]).filter(x => x[2] > 0);
+  return `<div class="stack" role="img" aria-label="Répartition du coût de revient">${by.map(([n, col, v]) => `<i style="width:${v / total * 100}%;background:${col}" title="${n} : ${eur0(v)}"></i>`).join('')}</div>
+    <div class="legend">${by.map(([n, col, v]) => `<span><i style="background:${col}"></i>${n} <b class="tnum">${eur0(v)}</b> <small>${Math.round(v / total * 100)} %</small></span>`).join('')}</div>`;
+}
+function tChiffrage(p) {
+  const c = p.chiffrage, k = costs(p);
+  const mCls = !c.pv ? 'p-mute' : k.taux >= 35 ? 'p-ok' : k.taux >= 20 ? 'p-amb' : 'p-stop';
+  $('#ptab').innerHTML = `
+  <div class="grid g4">
+    <div class="card kpi"><div class="lbl">Coût de revient</div><div class="v tnum" style="font-size:30px">${eur0(k.total)}</div><div class="s">${eur(k.unit)} par flacon</div></div>
+    <div class="card kpi"><div class="lbl">Prix de vente</div><div class="v tnum" style="font-size:30px">${eur0(k.ca)}</div><div class="s">${c.pv ? eur(c.pv) + ' × ' + num(p.qte) + ' flacons' : 'à définir'}</div></div>
+    <div class="card kpi"><div class="lbl">Marge brute</div><div class="v tnum" style="font-size:30px;color:${k.marge < 0 ? 'var(--stop)' : 'var(--ok)'}">${eur0(k.marge)}</div><div class="s"><span class="pill ${mCls}">${c.pv ? Math.round(k.taux) + ' %' : '—'}</span> ${c.pv ? '· ' + eur(c.pv - k.unit) + ' par flacon' : ''}</div></div>
+    <div class="card kpi"><div class="lbl">Coefficient</div><div class="v tnum" style="font-size:30px">${c.pv ? k.coef.toLocaleString('fr-FR', { maximumFractionDigits: 2 }) : '—'}</div><div class="s">prix de vente ÷ coût de revient</div></div>
+  </div>
+  <div class="grid g21 sec" style="margin-top:14px">
+    <div class="card"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline"><h2 style="font-size:20px">Répartition du coût de revient</h2><span class="mute tnum" style="font-size:14px">${eur(k.unit)} / flacon</span></div>
+      ${k.total ? breakdown(k.rows, k.total) : '<p class="empty">Renseignez les coûts ci-dessous.</p>'}</div>
+    <div class="card"><h2 style="font-size:20px;margin-bottom:10px">Où en est l’argent ?</h2>
+      <div class="money"><div><span>Dépenses payées</span><b class="tnum">${eur0(k.paye)}</b></div><div class="bar"><i style="width:${k.total ? k.paye / k.total * 100 : 0}%;background:var(--amber)"></i></div><small class="mute">reste à payer ${eur0(k.total - k.paye)}</small></div>
+      <div class="money" style="margin-top:14px"><div><span>Encaissé du client</span><b class="tnum">${eur0(c.encaisse)}</b></div><div class="bar"><i style="width:${k.ca ? Math.min(100, c.encaisse / k.ca * 100) : 0}%;background:var(--ok)"></i></div><small class="mute">reste à facturer ${eur0(Math.max(0, k.ca - c.encaisse))}</small></div>
+      <div class="money" style="margin-top:14px"><div><span>Trésorerie du projet</span><b class="tnum" style="color:${c.encaisse - k.paye < 0 ? 'var(--stop)' : 'var(--ok)'}">${eur0(c.encaisse - k.paye)}</b></div><small class="mute">encaissé moins dépensé, à ce jour</small></div>
+    </div>
+  </div>
+  <form class="card inline sec" id="pvf" style="margin-top:14px">
+    <label class="f" style="width:170px"><span>Prix de vente (€/flacon)</span><input id="c-pv" type="number" min="0" step="0.01" value="${c.pv}"></label>
+    <label class="f" style="width:170px"><span>Concentré (€ / kg)</span><input id="c-jk" type="number" min="0" step="0.5" value="${c.jusKg}" placeholder="0 si fourni par le client"></label>
+    <label class="f" style="width:170px"><span>Encaissé du client (€)</span><input id="c-enc" type="number" min="0" step="1" value="${c.encaisse}"></label>
+    <button class="btn pri" type="submit">Recalculer</button>
+    <span class="mute" style="font-size:13px;align-self:center">${p.jus.par === 'client' && !c.jusKg ? 'Concentré acheté par le client : 0 € pour AZ.' : ''}</span>
+  </form>
+  <div class="sec"><h2>Détail des coûts <small>cochez « Payé » au fur et à mesure</small></h2>
+    <div class="card tbl-wrap"><table class="tbl"><thead><tr><th>Élément</th><th>Poste</th><th class="n">Quantité</th><th class="n">Prix unitaire</th><th class="n">Total</th><th class="n">Par flacon</th><th>Payé</th><th></th></tr></thead><tbody>
+    ${k.rows.map(r => `<tr><td><div class="art">${r.sw ? `<span class="sw" style="background:${r.sw}"></span>` : `<span class="sw" style="background:${(CATS.find(x => x[0] === r.cat) || [0, 'var(--mute)'])[1]}"></span>`}<b style="font-weight:600">${E(r.lib)}</b></div></td><td class="mute">${E(r.cat)}</td>
+      <td class="n">${r.unit === 'kg' ? kg(r.q) : r.unit === 'forfait' ? 'forfait' : num(r.q)}</td>
+      <td class="n">${r.k === 'jus' ? eur(r.pu) + '/kg' : `<input class="pu" type="number" min="0" step="0.01" value="${r.pu}" data-pu="${r.k}:${r.id}" aria-label="Prix unitaire ${E(r.lib)}">`}</td>
+      <td class="n"><b>${eur(r.tot)}</b></td><td class="n mute">${eur(p.qte ? r.tot / p.qte : 0)}</td>
+      <td><input type="checkbox" class="pay" data-pay="${r.k}:${r.id || ''}" ${r.paye ? 'checked' : ''} aria-label="Payé : ${E(r.lib)}"></td>
+      <td>${r.k === 'f' ? `<button class="btn sm ghost" data-delf="${r.id}" aria-label="Supprimer">✕</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="8" class="empty">Aucun coût.</td></tr>'}
+    </tbody><tfoot><tr><td colspan="4"><b>Coût de revient</b></td><td class="n"><b>${eur(k.total)}</b></td><td class="n"><b>${eur(k.unit)}</b></td><td colspan="2"></td></tr></tfoot></table></div>
+    <form class="card inline" id="frf" style="margin-top:12px">
+      <label class="f" style="flex:1;min-width:200px"><span>Autre frais</span><input id="fr-l" required placeholder="ex. Graphisme, transport, douane, conditionnement"></label>
+      <label class="f" style="width:160px"><span>Poste</span><select id="fr-c">${CATS.filter(x => !['Concentré', 'Flacons', 'Pompes et capots'].includes(x[0])).map(x => `<option>${x[0]}</option>`).join('')}</select></label>
+      <label class="f" style="width:130px"><span>Type</span><select id="fr-m"><option value="f">Forfait</option><option value="u">Par flacon</option></select></label>
+      <label class="f" style="width:110px"><span>Montant (€)</span><input id="fr-v" type="number" min="0" step="0.01" required></label>
+      <button class="btn" type="submit">${ic('plus')}Ajouter</button>
+    </form>
+    <p class="mute" style="font-size:13.5px">Le prix unitaire d’un composant reprend celui du catalogue. Modifiez-le ici si ce client a eu un tarif différent. Montants HT.</p></div>`;
+  $('#pvf').onsubmit = e => { e.preventDefault(); c.pv = Math.max(0, +$('#c-pv').value || 0); c.jusKg = Math.max(0, +$('#c-jk').value || 0); c.encaisse = Math.max(0, +$('#c-enc').value || 0); save(); toast('Chiffrage recalculé'); vProjet(); };
+  $$('[data-pu]').forEach(i => i.onchange = () => { const [t, id] = i.dataset.pu.split(':'); const v = Math.max(0, +i.value || 0); if (t === 'l') p.lignes.find(x => x.id === id).pu = v; else c.frais.find(x => x.id === id).montant = v; save(); vProjet(); });
+  $$('[data-pay]').forEach(i => i.onchange = () => { const [t, id] = i.dataset.pay.split(':'); if (t === 'jus') c.jusPaye = i.checked; else if (t === 'l') p.lignes.find(x => x.id === id).paye = i.checked; else c.frais.find(x => x.id === id).paye = i.checked; save(); toast(i.checked ? 'Marqué payé' : 'Marqué non payé'); vProjet(); });
+  $$('[data-delf]').forEach(b => b.onclick = () => { c.frais = c.frais.filter(x => x.id !== b.dataset.delf); save(); vProjet(); });
+  $('#frf').onsubmit = e => { e.preventDefault(); c.frais.push({ id: uid(), lib: $('#fr-l').value.trim(), cat: $('#fr-c').value, mode: $('#fr-m').value, montant: Math.max(0, +$('#fr-v').value || 0), paye: false }); save(); toast('Frais ajouté'); vProjet(); };
+}
+function vChiffrage() {
+  const ps = S.projets.slice().sort((a, b) => a.etape - b.etape || a.echeance.localeCompare(b.echeance));
+  const all = ps.map(p => [p, costs(p)]), sum = f => all.reduce((s, [p, k]) => s + f(p, k), 0);
+  const ca = sum((p, k) => k.ca), cr = sum((p, k) => k.total), mg = ca - cr, pay = sum((p, k) => k.paye), enc = sum(p => p.chiffrage.encaisse);
+  const max = Math.max(1, ...all.map(([p, k]) => Math.max(k.ca, k.total)));
+  $('#view').innerHTML = `<div class="head"><div><h1>Chiffrage</h1><p>Coût de revient, prix de vente et marge de chaque projet. Montants HT.</p></div></div>
+  <div class="grid g4">
+    <div class="card kpi"><div class="lbl">Chiffre d’affaires</div><div class="v tnum" style="font-size:30px">${eur0(ca)}</div><div class="s">${ps.length} projets</div></div>
+    <div class="card kpi"><div class="lbl">Coûts de revient</div><div class="v tnum" style="font-size:30px">${eur0(cr)}</div><div class="s">${eur0(pay)} déjà payés</div></div>
+    <div class="card kpi"><div class="lbl">Marge brute</div><div class="v tnum" style="font-size:30px;color:var(--ok)">${eur0(mg)}</div><div class="s">${ca ? Math.round(mg / ca * 100) : 0} % du chiffre d’affaires</div></div>
+    <div class="card kpi"><div class="lbl">Encaissé</div><div class="v tnum" style="font-size:30px">${eur0(enc)}</div><div class="s">reste ${eur0(Math.max(0, ca - enc))} à facturer</div></div>
+  </div>
+  <div class="sec"><h2>Rapport par projet <small>barre claire : prix de vente · barre foncée : coût de revient</small></h2>
+  <div class="card tbl-wrap"><table class="tbl"><thead><tr><th>Projet</th><th style="min-width:180px">Vente / coût</th><th class="n">Prix de vente</th><th class="n">Coût de revient</th><th class="n">Coût / flacon</th><th class="n">Marge</th><th class="n">Taux</th><th class="n">Payé</th><th class="n">Encaissé</th></tr></thead><tbody>
+  ${all.map(([p, k]) => `<tr><td><button class="btn sm ghost" data-p="${p.id}" data-tab="chiffrage" style="padding-left:0;text-align:left"><b>${E(p.nom)}</b></button><br><small class="mute">${E(ct(p.client).nom)} · ${ETAPES[p.etape]}</small></td>
+    <td><div class="vs"><i class="ca" style="width:${k.ca / max * 100}%"></i><i class="cr" style="width:${k.total / max * 100}%"></i></div></td>
+    <td class="n">${k.ca ? eur0(k.ca) : '<span class="mute">à définir</span>'}</td><td class="n">${eur0(k.total)}</td><td class="n">${eur(k.unit)}</td>
+    <td class="n" style="color:${k.marge < 0 ? 'var(--stop)' : 'inherit'}"><b>${k.ca ? eur0(k.marge) : '—'}</b></td>
+    <td class="n">${k.ca ? `<span class="pill ${k.taux >= 35 ? 'p-ok' : k.taux >= 20 ? 'p-amb' : 'p-stop'}">${Math.round(k.taux)} %</span>` : '—'}</td>
+    <td class="n">${eur0(k.paye)}</td><td class="n">${eur0(p.chiffrage.encaisse)}</td></tr>`).join('')}
+  </tbody></table></div></div>`;
+}
+
+/* ===================== Stock ===================== */
+function stockOf(a) {
+  const r = { res: 0, cmd: 0, cond: 0 };
+  S.projets.forEach(p => p.lignes.filter(l => l.art === a.id).forEach(l => { if (l.st === 1 || l.st === 2) r.cmd += l.qte; else if (l.st === 3) r.res += l.qte; else if (l.st >= 4 && p.etape < 4) r.cond += l.qte; }));
+  return r;
+}
+function vStock() {
+  const types = [...new Set(S.articles.map(a => a.type))];
+  $('#view').innerHTML = `
+  <div class="head"><div><h1>Stock</h1><p>Ce qui est libre à l’atelier, ce qui est réservé pour un client, ce qui est en route et ce qui est chez les conditionneurs.</p></div></div>
+  <div class="tabs" role="tablist"><button role="tab" data-st="general" aria-selected="${stab === 'general'}">Stock général</button><button role="tab" data-st="client" aria-selected="${stab === 'client'}">Par client</button></div>
+  <div id="stk"></div>`;
+  $$('[data-st]').forEach(b => b.onclick = () => { stab = b.dataset.st; vStock(); });
+  if (stab === 'general') {
+    $('#stk').innerHTML = types.map(t => `<div class="sec" style="margin-top:14px"><h2 style="font-size:18px;margin-bottom:8px">${E(t)}s</h2><div class="card tbl-wrap" style="padding:6px 10px"><table class="tbl"><thead><tr><th>Article</th><th class="n">Libre</th><th class="n">Réservé clients</th><th class="n">En commande</th><th class="n">Chez conditionneurs</th><th></th></tr></thead><tbody>
+      ${S.articles.filter(a => a.type === t).map(a => { const s = stockOf(a), low = a.seuil && a.libre < a.seuil; return `<tr><td>${artCell(a)}</td><td class="n"><b>${num(a.libre)}</b>${low ? ` <span class="pill p-warn">bas</span>` : ''}</td><td class="n">${num(s.res)}</td><td class="n">${num(s.cmd)}</td><td class="n">${num(s.cond)}</td><td style="text-align:right"><button class="btn sm" data-adj="${a.id}">Ajuster</button></td></tr>`; }).join('')}
+      </tbody></table></div></div>`).join('');
+    $$('[data-adj]').forEach(b => b.onclick = () => adjustModal(art(b.dataset.adj)));
+  } else {
+    const cls = S.contacts.filter(c => c.type === 'client');
+    $('#stk').innerHTML = cls.map(c => { const ps = S.projets.filter(p => p.client === c.id && p.etape < 4); if (!ps.length) return ''; return `<div class="sec" style="margin-top:14px"><h2 style="font-size:20px;margin-bottom:8px">${E(c.nom)} <small>${ps.length} projet(s) en cours</small></h2>
+      ${ps.map(p => { const v = valid(p), n = need(p); return `<div class="card tbl-wrap" style="margin-bottom:10px;padding:10px 12px"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px"><button class="btn sm ghost" data-p="${p.id}" style="padding-left:0"><b style="font-family:var(--f-display);font-size:17px">${E(p.nom)}</b></button><span class="ref">${p.ref}</span><span class="mute" style="font-size:13px">${p.cond ? '→ ' + E(ct(p.cond).nom) : ''}</span></div>
+        <table class="tbl"><tbody><tr><td><div class="art"><span class="sw" style="background:var(--amber)"></span><div><b>Concentré ${v ? E(v.ref) : '(non validé)'}</b><small>${p.jus.par === 'az' ? 'commandé par AZ' : 'commandé par le client'}</small></div></div></td><td class="n">${kg(p.jus.kgLivre)} / ${kg(n)}</td><td><span class="pill ${v && p.jus.kgLivre >= n - 0.001 ? 'p-ok' : 'p-warn'}">${v && p.jus.kgLivre >= n - 0.001 ? 'Chez le conditionneur' : 'Incomplet'}</span></td></tr>
+        ${p.lignes.map(l => { const a = art(l.art); return `<tr><td>${artCell(a)}</td><td class="n">${num(l.qte)}</td><td><span class="pill ${l.st === 5 ? 'p-ok' : l.st >= 3 ? 'p-glass' : l.st >= 1 ? 'p-amb' : 'p-warn'}">${LST[l.st].n}</span></td></tr>`; }).join('')}</tbody></table></div>`; }).join('')}</div>`; }).join('');
+  }
+}
+function adjustModal(a) {
+  openModal(`<h2>Ajuster le stock</h2><p class="mute" style="margin:0 0 12px">${E(a.nom)} · <span class="ref">${E(a.ref)}</span></p>
+    <form class="form" id="af"><div class="two"><label class="f"><span>Stock libre compté</span><input id="a-l" type="number" min="0" value="${a.libre}"></label><label class="f"><span>Seuil d’alerte</span><input id="a-s" type="number" min="0" value="${a.seuil}"></label></div>
+    <div class="end"><button type="button" class="btn ghost" data-close>Annuler</button><button class="btn pri" type="submit">Enregistrer</button></div></form>`);
+  $('#af').onsubmit = e => { e.preventDefault(); a.libre = Math.max(0, +$('#a-l').value || 0); a.seuil = Math.max(0, +$('#a-s').value || 0); save(); closeModal(); toast('Stock mis à jour'); vStock(); renderNav(); };
+}
+
+/* ===================== Commandes ===================== */
+function vCmd() {
+  const list = S.commandes.slice().sort((a, b) => (a.st === 'recue') - (b.st === 'recue') || a.eta.localeCompare(b.eta));
+  $('#view').innerHTML = `
+  <div class="head"><div><h1>Commandes fournisseurs</h1><p>Chine et France : ce qui est commandé, ce qui voyage, ce qui est arrivé.</p></div><div class="act"><button class="btn pri" id="nc">${ic('plus')}Nouvelle commande</button></div></div>
+  <div class="card tbl-wrap"><table class="tbl"><thead><tr><th>N°</th><th>Fournisseur</th><th>Articles</th><th>Pour</th><th>Arrivée prévue</th><th>Statut</th><th></th></tr></thead><tbody>
+  ${list.map(o => { const late = o.st !== 'recue' && days(o.eta) < 0; return `<tr><td><span class="ref">${o.num}</span><br><small class="mute">le ${fd(o.date)}</small></td><td>${E(ct(o.four).nom)}<br><small class="mute">${E(ct(o.four).info.split(' · ')[0])}</small></td>
+    <td>${o.lignes.map(l => `<div class="art" style="margin:2px 0"><span class="sw" style="background:${art(l.art).sw}"></span><span><b class="tnum">${num(l.qte)}</b> × ${E(art(l.art).nom)}</span></div>`).join('')}${o.suivi ? `<small class="mute">${E(o.suivi)}</small>` : ''}</td>
+    <td>${o.lignes.map(l => l.proj ? `<button class="btn sm ghost" data-p="${l.proj}" style="padding-left:0">${E(proj(l.proj).nom)}</button>` : '<span class="mute">Stock général</span>').join('<br>')}</td>
+    <td class="tnum">${fd(o.eta)}${o.st !== 'recue' ? `<br><small class="${late ? '' : 'mute'}" style="${late ? 'color:var(--stop);font-weight:700' : ''}">${late ? 'retard de ' + (-days(o.eta)) + ' j' : rel(o.eta)}</small>` : ''}</td>
+    <td><span class="pill ${late ? 'p-stop' : CST[o.st][1]}">${CST[o.st][0]}</span></td>
+    <td style="text-align:right;white-space:nowrap">${o.st === 'commandee' ? `<button class="btn sm" data-ot="${o.id}">En transit</button>` : ''}${o.st !== 'recue' ? ` <button class="btn sm pri" data-or="${o.id}">Réceptionner</button>` : ''}</td></tr>`; }).join('')}
+  </tbody></table></div>
+  <p class="mute" style="font-size:13.5px">« Réceptionner » met à jour le stock général, ou passe les composants du projet en « Reçu à l’atelier ».</p>`;
+  $('#nc').onclick = () => orderModal();
+  $$('[data-ot]').forEach(b => b.onclick = () => { const o = byId(S.commandes, b.dataset.ot); o.st = 'transit'; linked(o).forEach(([p, l]) => { if (l.st < 2) l.st = 2; }); save(); toast(o.num + ' en transit'); vCmd(); });
+  $$('[data-or]').forEach(b => b.onclick = () => receive(byId(S.commandes, b.dataset.or)));
+}
+const linked = o => S.projets.flatMap(p => p.lignes.filter(l => l.cmd === o.id).map(l => [p, l]));
+function receive(o) {
+  o.st = 'recue'; o.eta = o.eta > TODAY ? TODAY : o.eta;
+  const ls = linked(o);
+  ls.forEach(([p, l]) => { if (l.st < 3) { l.st = 3; p.notes.unshift({ d: TODAY, t: `${num(l.qte)} × ${art(l.art).nom} reçus à l’atelier (${o.num}).` }); } });
+  o.lignes.filter(x => !x.proj).forEach(x => { art(x.art).libre += x.qte; });
+  save(); toast(o.num + ' réceptionnée'); render();
+}
+function orderModal(p, l) {
+  const fours = S.contacts.filter(c => c.type === 'fournisseur');
+  const a0 = l ? art(l.art) : S.articles[0];
+  openModal(`<h2>${l ? 'Commander pour ' + E(p.nom) : 'Nouvelle commande'}</h2>
+    <form class="form" id="of">
+      <label class="f"><span>Article</span><select id="o-art" ${l ? 'disabled' : ''}>${S.articles.map(a => `<option value="${a.id}" ${a.id === a0.id ? 'selected' : ''}>${E(a.type)} · ${E(a.nom)}</option>`).join('')}</select></label>
+      <div class="two"><label class="f"><span>Fournisseur</span><select id="o-four">${fours.map(f => `<option value="${f.id}" ${f.id === a0.four ? 'selected' : ''}>${E(f.nom)}</option>`).join('')}</select></label>
+      <label class="f"><span>Quantité</span><input id="o-qte" type="number" min="1" value="${l ? l.qte : 500}" ${l ? 'readonly' : ''}></label></div>
+      <div class="two"><label class="f"><span>Arrivée prévue</span><input id="o-eta" type="date" value="${D(a0.four <= 'f3' ? 30 : 12)}"></label>
+      <label class="f"><span>Pour</span><select id="o-proj" ${l ? 'disabled' : ''}><option value="">Stock général</option>${active().map(x => `<option value="${x.id}" ${p && x.id === p.id ? 'selected' : ''}>${E(x.nom)} · ${E(ct(x.client).nom)}</option>`).join('')}</select></label></div>
+      <label class="f"><span>Suivi (optionnel)</span><input id="o-suivi" placeholder="n° de suivi, transporteur…"></label>
+      <div class="end"><button type="button" class="btn ghost" data-close>Annuler</button><button class="btn pri" type="submit">Enregistrer la commande</button></div>
+    </form>`);
+  const fourOf = () => art($('#o-art').value).four;
+  $('#o-art').onchange = () => { $('#o-four').value = fourOf(); };
+  $('#of').onsubmit = e => {
+    e.preventDefault();
+    const o = { id: 'o' + uid(), num: 'CMD-' + TODAY.slice(2, 4) + TODAY.slice(5, 7) + '-' + String(S.cseq++).padStart(2, '0'), four: $('#o-four').value, date: TODAY, eta: $('#o-eta').value || D(30), st: 'commandee', suivi: $('#o-suivi').value.trim(), lignes: [] };
+    if (l) { o.lignes.push({ art: l.art, qte: l.qte, proj: p.id }); l.st = 1; l.cmd = o.id; p.notes.unshift({ d: TODAY, t: `${num(l.qte)} × ${art(l.art).nom} commandés chez ${ct(o.four).nom} (${o.num}).` }); }
+    else {
+      const pid = $('#o-proj').value, aid = $('#o-art').value, q = Math.max(1, +$('#o-qte').value || 1);
+      o.lignes.push({ art: aid, qte: q, proj: pid || null });
+      if (pid) { const pp = proj(pid); let ln = pp.lignes.find(x => x.art === aid && x.st === 0); if (!ln) { ln = { id: uid(), art: aid, qte: q, st: 0, cmd: null, pu: art(aid).pu || 0, paye: false }; pp.lignes.push(ln); } ln.st = 1; ln.cmd = o.id; }
+    }
+    S.commandes.push(o); save(); closeModal(); toast('Commande ' + o.num + ' enregistrée'); render();
+  };
+}
+
+/* ===================== Agenda ===================== */
+function upcoming() {
+  const out = [];
+  S.projets.forEach(p => {
+    p.rdv.forEach(r => out.push({ kind: 'rdv', d: r.d, h: r.h, t: r.t, s: `${p.nom} · ${ct(p.client).nom} · ${r.lieu}`, p: p.id }));
+    if (p.etape < 4) out.push({ kind: 'ech', d: p.echeance, h: '', t: 'Échéance : ' + p.nom, s: `${ct(p.client).nom} · ${num(p.qte)} × ${p.vol} ml · étape ${ETAPES[p.etape]}`, p: p.id });
+  });
+  S.commandes.filter(o => o.st !== 'recue').forEach(o => out.push({ kind: 'eta', d: o.eta, h: '', t: 'Arrivée ' + o.num, s: `${ct(o.four).nom} · ${o.lignes.map(l => num(l.qte) + ' × ' + art(l.art).nom).join(', ')}`, o: o.id }));
+  return out.filter(x => days(x.d) >= -1).sort((a, b) => (a.d + a.h).localeCompare(b.d + b.h));
+}
+const KIND = { rdv: ['Rendez-vous', 'p-glass'], ech: ['Échéance', 'p-amb'], eta: ['Livraison', 'p-mute'] };
+const agendaList = (list, max) => list.slice(0, max || 99).map(x => `<div class="rdv">${cal(x.d)}<div class="t" style="flex:1"><b>${E(x.t)}</b><small>${x.h ? E(x.h) + ' · ' : ''}${E(x.s)}</small></div>${x.p ? `<button class="btn sm ghost" data-p="${x.p}">Ouvrir</button>` : `<button class="btn sm ghost" data-nav="commandes">Voir</button>`}</div>`).join('');
+function vAgenda() {
+  const up = upcoming();
+  const groups = [['Cette semaine', x => days(x.d) <= 7], ['Les 3 semaines suivantes', x => days(x.d) > 7 && days(x.d) <= 28], ['Plus tard', x => days(x.d) > 28]];
+  $('#view').innerHTML = `<div class="head"><div><h1>Agenda</h1><p>Rendez-vous clients, échéances des projets et arrivées des commandes, au même endroit.</p></div></div>
+    ${groups.map(([g, f]) => { const l = up.filter(f); return l.length ? `<div class="sec" style="margin-top:14px"><h2 style="font-size:19px;margin-bottom:8px">${g}</h2><div class="card">${l.map(x => `<div class="rdv">${cal(x.d)}<div class="t" style="flex:1"><b>${E(x.t)}</b><small>${x.h ? E(x.h) + ' · ' : ''}${E(x.s)}</small></div><span class="pill ${KIND[x.kind][1]}">${KIND[x.kind][0]}</span>${x.p ? `<button class="btn sm ghost" data-p="${x.p}">Ouvrir</button>` : ''}</div>`).join('')}</div></div>` : ''; }).join('')}`;
+}
+
+/* ===================== Contacts ===================== */
+function vContacts() {
+  const G = [['client', 'Clients'], ['nez', 'Nez et laboratoires'], ['fournisseur', 'Fournisseurs'], ['conditionneur', 'Conditionneurs']];
+  $('#view').innerHTML = `<div class="head"><div><h1>Contacts</h1><p>Tous les intervenants d’un projet de parfum.</p></div></div>
+    <div class="contacts">${G.map(([k, l]) => `<div class="card"><div class="lbl">${l}</div><ul>${S.contacts.filter(c => c.type === k).map(c => { const n = k === 'client' ? S.projets.filter(p => p.client === c.id).length : k === 'nez' ? S.projets.reduce((s, p) => s + p.formules.filter(f => f.nez === c.id).length, 0) : k === 'fournisseur' ? S.commandes.filter(o => o.four === c.id).length : S.projets.filter(p => p.cond === c.id && p.etape < 4).length; return `<li><b>${E(c.nom)}</b><small>${E(c.info)} · ${n} ${k === 'client' ? 'projet(s)' : k === 'nez' ? 'formule(s)' : k === 'fournisseur' ? 'commande(s)' : 'projet(s) en cours'}</small></li>`; }).join('')}</ul></div>`).join('')}</div>`;
+}
+
+/* ===================== Nouveau projet ===================== */
+function newProjet() {
+  const cl = S.contacts.filter(c => c.type === 'client'), co = S.contacts.filter(c => c.type === 'conditionneur');
+  openModal(`<h2>Nouveau projet</h2><form class="form" id="pf">
+    <label class="f"><span>Nom du parfum</span><input id="p-nom" required placeholder="ex. Musc Velours"></label>
+    <div class="two"><label class="f"><span>Client</span><select id="p-cl">${cl.map(c => `<option value="${c.id}">${E(c.nom)}</option>`).join('')}<option value="new">+ Nouveau client</option></select></label>
+    <label class="f" id="p-ncw" hidden><span>Nom du nouveau client</span><input id="p-nc" placeholder="ex. Maison Selma"></label></div>
+    <div class="two"><label class="f"><span>Quantité (flacons)</span><input id="p-q" type="number" min="1" value="500"></label><label class="f"><span>Contenance</span><select id="p-v"><option>30</option><option selected>50</option><option>100</option></select></label></div>
+    <div class="two"><label class="f"><span>Concentration (%)</span><input id="p-c" type="number" min="1" max="40" value="20"></label><label class="f"><span>Échéance</span><input id="p-e" type="date" value="${D(60)}"></label></div>
+    <div class="two"><label class="f"><span>Conditionneur</span><select id="p-k"><option value="">À choisir</option>${co.map(c => `<option value="${c.id}">${E(c.nom)}</option>`).join('')}</select></label><label class="f"><span>Concentré commandé par</span><select id="p-via"><option value="client">Le client</option><option value="az">AZ Cosmétik</option></select></label></div>
+    <div class="end"><button type="button" class="btn ghost" data-close>Annuler</button><button class="btn pri" type="submit">Créer le projet</button></div></form>`);
+  $('#p-cl').onchange = () => { $('#p-ncw').hidden = $('#p-cl').value !== 'new'; };
+  $('#pf').onsubmit = e => {
+    e.preventDefault();
+    let cid = $('#p-cl').value;
+    if (cid === 'new') { const n = $('#p-nc').value.trim() || 'Nouveau client'; cid = 'c' + uid(); S.contacts.push({ id: cid, type: 'client', nom: n, info: 'Ajouté le ' + fd(TODAY) }); }
+    const p = { id: 'p' + uid(), ref: 'AZK-' + TODAY.slice(2, 4) + '-' + String(S.seq++).padStart(3, '0'), nom: $('#p-nom').value.trim(), client: cid, etape: 0, echeance: $('#p-e').value || D(60), qte: Math.max(1, +$('#p-q').value || 1), vol: +$('#p-v').value, conc: Math.max(1, +$('#p-c').value || 20), cond: $('#p-k').value, via: $('#p-via').value, formules: [], jus: { kgCmd: 0, par: $('#p-via').value, kgLivre: 0, dateLivre: '' }, chiffrage: { pv: 0, jusKg: 0, jusPaye: false, encaisse: 0, frais: [] }, lignes: [], notes: [{ d: TODAY, t: 'Projet créé.' }], taches: [], rdv: [] };
+    S.projets.push(p); save(); closeModal(); toast('Projet ' + p.ref + ' créé'); ptab = 'apercu'; go('projet-' + p.id);
+  };
+}
+
+/* ===================== Recherche ===================== */
+const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+$('#q').addEventListener('input', () => {
+  const q = norm($('#q').value.trim()), box = $('#res');
+  if (q.length < 2) { box.hidden = true; return; }
+  const r = [];
+  S.projets.forEach(p => { if (norm(p.nom + ' ' + p.ref + ' ' + ct(p.client).nom).includes(q)) r.push(`<button data-p="${p.id}"><span class="ref">${p.ref}</span><span><b>${E(p.nom)}</b> · ${E(ct(p.client).nom)}</span><span class="k">Projet</span></button>`); });
+  S.projets.forEach(p => p.formules.forEach(f => { if (norm(f.ref).includes(q)) r.push(`<button data-p="${p.id}" data-tab="jus"><span class="ref">${E(f.ref)}</span><span>${E(p.nom)} · <span class="pill ${FST[f.statut][1]}">${FST[f.statut][0]}</span></span><span class="k">Formule</span></button>`); }));
+  S.articles.forEach(a => { if (norm(a.nom + ' ' + a.ref).includes(q)) r.push(`<button data-nav="stock"><span class="sw" style="background:${a.sw}"></span><span><b>${E(a.nom)}</b> · ${num(a.libre)} libres</span><span class="k">Article</span></button>`); });
+  S.commandes.forEach(o => { if (norm(o.num + ' ' + ct(o.four).nom).includes(q)) r.push(`<button data-nav="commandes"><span class="ref">${o.num}</span><span>${E(ct(o.four).nom)}</span><span class="k">Commande</span></button>`); });
+  box.innerHTML = r.slice(0, 10).join('') || '<p class="empty" style="padding:8px 10px">Aucun résultat.</p>';
+  box.hidden = false;
+});
+$('#res').addEventListener('click', e => { setTimeout(() => { $('#res').hidden = true; $('#q').value = ''; }, 0); }, true);
+document.addEventListener('click', e => { if (!e.target.closest('.search')) $('#res').hidden = true; });
+
+/* ===================== Modal, toast, reset ===================== */
+function openModal(html) { const m = $('#modal'); m.innerHTML = `<div class="card" role="dialog" aria-modal="true">${html}</div>`; m.hidden = false; const f = m.querySelector('input:not([readonly]),select'); if (f) f.focus(); }
+function closeModal() { $('#modal').hidden = true; $('#modal').innerHTML = ''; }
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal' || e.target.closest('[data-close]')) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); $('#res').hidden = true; } });
+let tt; function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => el.classList.remove('on'), 2600); }
+let armed = false;
+$('#reset').onclick = () => { if (!armed) { armed = true; $('#reset').textContent = 'Confirmer la réinitialisation'; setTimeout(() => { armed = false; $('#reset').textContent = 'Réinitialiser la démo'; }, 4000); return; } S = seed(); save(); armed = false; $('#reset').textContent = 'Réinitialiser la démo'; toast('Démo réinitialisée'); go('tableau'); };
+
+window.addEventListener('hashchange', () => go(location.hash));
+go(location.hash);
+})();
+</script>
+
+</body>
+</html>
